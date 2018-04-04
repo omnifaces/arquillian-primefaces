@@ -135,6 +135,26 @@
 				</executions>
 			</plugin>
 
+			<!-- Configure the jar with the javadoc. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<javadocVersion>1.8</javadocVersion>
+					<notimestamp>true</notimestamp>
+					<splitindex>true</splitindex>
+					<doctitle>ArquillianPrimeFaces API documentation</doctitle>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- Configure snapshot deployment to Sonatype. -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
