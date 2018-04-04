@@ -1,6 +1,24 @@
 # arquillian-primefaces
 To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces components
 
+### Prerequirements
+
+```XML
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.jboss.arquillian.graphene</groupId>
+    <artifactId>graphene-webdriver</artifactId>
+    <version>2.3.2</version>
+    <type>pom</type>
+    <scope>test</scope>
+</dependency>
+```
+
 ### Installation
 
 ```XML
