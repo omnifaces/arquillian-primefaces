@@ -78,9 +78,9 @@ public void testSomeJSFPageWithPrimeFacesComponents() {
 - `<p:spinner>`
 - `<p:slider>`
 - `<p:autoComplete>`
-- `<p:selectOneMenu>`
-- `<p:selectOneRadio>`
+- `<p:selectOneMenu>` (also with `<p:ajax>`)
+- `<p:selectOneRadio>` (also with `<p:ajax>`)
 - `<p:selectBooleanCheckbox>`
-- `<p:commandButton>`
-- `<p:commandLink>`
+- `<p:commandButton>` (also with `ajax=false`)
+- `<p:commandLink>` (also with `ajax=false`)
 - `<p:link>`
