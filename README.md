@@ -5,6 +5,11 @@ To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces compo
 
 ```XML
 <dependency>
+    <groupId>org.primefaces</groupId>
+    <artifactId>primefaces</artifactId>
+    <version>6.2</version>
+</dependency>
+<dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
     <version>4.12</version>
@@ -25,7 +30,7 @@ To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces compo
 <dependency>
     <groupId>org.omnifaces</groupId>
     <artifactId>arquillian-primefaces</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -63,14 +68,14 @@ public void testSomeJSFPageWithPrimeFacesComponents() {
     ArquillianPrimeFaces.setInputTextValue(inputText, "new input text value");
     ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "search query", "selected value");
     ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, "option value");
-    ArquillianPrimeFaces.selectBooleanCheckboxChecked(selectBooleanCheckbox, true);
+    ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, true);
     ArquillianPrimeFaces.clickCommandButton(commandButton);
     
     // ...
 }
 ```
 
-### Supported PrimeFaces components as of version 0.1
+### Supported PrimeFaces 6.2 components as of version 0.2
 
 - `<p:inputText>`
 - `<p:inputMask>`
