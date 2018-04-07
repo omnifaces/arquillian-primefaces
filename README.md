@@ -35,8 +35,11 @@ To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces compo
 ```XML
 <h:form id="form">
     <p:inputText id="inputText" ... />
+    <p:inputNumber id="inputNumber" ... />
+    <p:spinner id="spinner" ... />
     <p:autoComplete id="autoComplete" ... />
     <p:selectOneMenu id="selectOneMenu" ... />
+    <p:selectOneRadio id="selectOneRadio" ... />
     <p:selectBooleanCheckbox id="selectBooleanCheckbox" ... />
     <p:commandButton id="commandButton" ... />
 </h:form>
@@ -46,11 +49,20 @@ To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces compo
 @FindBy(id="form:inputText")
 private WebElement inputText;
 
+@FindBy(id="form:inputNumber")
+private WebElement inputNumber;
+
+@FindBy(id="form:spinner")
+private WebElement spinner;
+
 @FindBy(id="form:autoComplete")
 private WebElement autoComplete;
 
 @FindBy(id="form:selectOneMenu")
 private WebElement selectOneMenu;
+
+@FindBy(id="form:selectOneRadio")
+private WebElement selectOneRadio;
 
 @FindBy(id="form:selectBooleanCheckbox")
 private WebElement selectBooleanCheckbox;
@@ -61,8 +73,11 @@ private WebElement commandButton;
 @Test
 public void testSomeJSFPageWithPrimeFacesComponents() {
     ArquillianPrimeFaces.setInputTextValue(inputText, "new input text value");
-    ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "search query", "selected value");
+    ArquillianPrimeFaces.setInputNumberValue(inputText, 42);
+    ArquillianPrimeFaces.setSpinnerValue(inputText, 7);
+    ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "search query", "option value");
     ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, "option value");
+    ArquillianPrimeFaces.setSelectOneRadioValue(selectOneMenu, "option value");
     ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, true);
     ArquillianPrimeFaces.clickCommandButton(commandButton);
     
