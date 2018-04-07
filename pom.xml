@@ -11,7 +11,7 @@
 
 	<groupId>org.omnifaces</groupId>
 	<artifactId>arquillian-primefaces</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 	<packaging>jar</packaging>
 
 	<name>ArquillianPrimeFaces</name>
