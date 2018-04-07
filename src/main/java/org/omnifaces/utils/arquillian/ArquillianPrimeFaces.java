@@ -158,9 +158,9 @@ public final class ArquillianPrimeFaces {
 		WebElement input = document.findElement(By.id(clientId + "_input"));
 		String itemValue = value.toString();
 		String itemLabel = input.findElement(By.cssSelector("option[value='" + itemValue + "']")).getText();
-		String selectedValue = input.findElement(By.cssSelector("option[selected]")).getAttribute("value");
+		WebElement selectedOption = input.findElements(By.tagName("option")).stream().filter(o -> input.getText().equals(o.getText())).findFirst().orElse(null);
 
-		if (!itemValue.equals(selectedValue)) {
+		if (selectedOption == null || !itemValue.equals(selectedOption.getAttribute("value"))) {
 			document.findElement(By.id(clientId + "_label")).click(); // Open panel.
 			WebElement panel = document.findElement(By.id(clientId + "_panel"));
 			WebElement selectItem = panel.findElement(By.cssSelector(".ui-selectonemenu-item[data-label='" + itemLabel + "']"));
@@ -218,7 +218,7 @@ public final class ArquillianPrimeFaces {
 	}
 
 	public static void setSliderValue(WebElement slider, Number value) {
-		setInputNumberValue(slider, value);
+		setInputTextValue(slider, value);
 	}
 
 	public static void setAutoCompleteQuery(WebElement autoComplete, String query) {
@@ -233,7 +233,7 @@ public final class ArquillianPrimeFaces {
 	public static void setAutoCompleteValue(WebElement autoComplete, Serializable value) {
 		String clientId = autoComplete.getAttribute("id");
 		WebElement document = autoComplete.findElement(By.xpath("/*"));
-		document.findElement(By.cssSelector("[id='" + clientId + "_panel'][data-item-value='" + value + "']")).click(); // Select item.
+		document.findElement(By.cssSelector("[id='" + clientId + "_panel']")).findElement(By.cssSelector("[data-item-value='" + value + "']")).click(); // Select item.
 	}
 
 	public static void setAutoCompleteValue(WebElement autoComplete, String query, Serializable value) {
