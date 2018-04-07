@@ -85,7 +85,7 @@ public void testSomeJSFPageWithPrimeFacesComponents() {
 }
 ```
 
-### Supported PrimeFaces 6.2 components as of version 0.2
+### Supported PrimeFaces 6.x components as of version 0.2
 
 - `<p:inputText>`
 - `<p:inputMask>`
@@ -100,4 +100,4 @@ public void testSomeJSFPageWithPrimeFacesComponents() {
 - `<p:commandLink>` (also with `ajax=false`)
 - `<p:link>`
 
-NOTE: Older PrimeFaces versions are not necessarily supported. This will be worked on later.
+NOTE: PrimeFaces 5.x is not necessarily supported. This might be worked on later. Currently, the integration tests run on PrimeFaces 6.0, 6.1 and 6.2.
