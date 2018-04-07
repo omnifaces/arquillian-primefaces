@@ -1,0 +1,57 @@
+<!--
+
+    Copyright 2018 OmniFaces
+
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+    the License. You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations under the License.
+
+-->
+<!DOCTYPE html>
+<html lang="en"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+>
+	<h:head>
+		<title>ArquillianPrimeFacesIT</title>
+	</h:head>
+	<h:body>
+		<h:form id="form">
+			<p:inputText id="inputText" value="#{arquillianPrimeFacesITBean.inputText}" />
+			<p:inputNumber id="inputNumber" value="#{arquillianPrimeFacesITBean.inputNumber}" />
+			<p:spinner id="spinner" value="#{arquillianPrimeFacesITBean.spinner}" />
+			<p:inputText id="slider" value="#{arquillianPrimeFacesITBean.slider}" />
+			<p:slider for="slider" />
+			<p:autoComplete id="autoComplete" value="#{arquillianPrimeFacesITBean.autoComplete}" 
+				completeMethod="#{arquillianPrimeFacesITBean.completeMethod}">
+			</p:autoComplete>
+			<p:selectOneMenu id="selectOneMenu" value="#{arquillianPrimeFacesITBean.selectOneMenu}">
+				<f:selectItems value="#{arquillianPrimeFacesITBean.selectItems}" />
+			</p:selectOneMenu>
+			<p:selectOneRadio id="selectOneRadio" value="#{arquillianPrimeFacesITBean.selectOneRadio}">
+				<f:selectItems value="#{arquillianPrimeFacesITBean.selectItems}" />
+			</p:selectOneRadio>
+			<p:selectBooleanCheckbox id="selectBooleanCheckbox" value="#{arquillianPrimeFacesITBean.selectBooleanCheckbox}" />
+			<p:commandButton id="commandButton" action="#{arquillianPrimeFacesITBean.commandButton}" update=":results" />
+		</h:form>
+
+		<h:panelGroup id="results">
+			<h:outputText id="inputTextResult" value="#{arquillianPrimeFacesITBean.inputText}" />
+			<h:outputText id="inputNumberResult" value="#{arquillianPrimeFacesITBean.inputNumber}" />
+			<h:outputText id="spinnerResult" value="#{arquillianPrimeFacesITBean.spinner}" />
+			<h:outputText id="sliderResult" value="#{arquillianPrimeFacesITBean.slider}" />
+			<h:outputText id="autoCompleteResult" value="#{arquillianPrimeFacesITBean.autoComplete}" />
+			<h:outputText id="selectOneMenuResult" value="#{arquillianPrimeFacesITBean.selectOneMenu}" />
+			<h:outputText id="selectOneRadioResult" value="#{arquillianPrimeFacesITBean.selectOneRadio}" />
+			<h:outputText id="selectBooleanCheckboxResult" value="#{arquillianPrimeFacesITBean.selectBooleanCheckbox}" />
+			<h:messages id="commandButtonResult" globalOnly="true" />
+		</h:panelGroup>
+	</h:body>
+</html>
