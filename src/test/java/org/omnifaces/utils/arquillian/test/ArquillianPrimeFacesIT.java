@@ -114,6 +114,13 @@ public class ArquillianPrimeFacesIT {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
 		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButton));
+		ArquillianPrimeFaces.assertValid(inputText);
+		ArquillianPrimeFaces.assertValid(inputNumber);
+		ArquillianPrimeFaces.assertValid(spinner);
+		ArquillianPrimeFaces.assertValid(slider);
+		ArquillianPrimeFaces.assertValid(autoComplete);
+		ArquillianPrimeFaces.assertValid(selectOneMenu);
+		ArquillianPrimeFaces.assertValid(selectOneRadio);
 		checkSubmittedValues("commandButton");
 	}
 
@@ -171,6 +178,32 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertStateless(form);
 		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect));
 		checkSubmittedValues("commandLinkWithRedirect");
+	}
+
+	@Test
+	public void testValidInputs() {
+		open("stateful.xhtml");
+		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButton));
+		ArquillianPrimeFaces.assertValid(inputText);
+		ArquillianPrimeFaces.assertValid(inputNumber);
+		ArquillianPrimeFaces.assertValid(spinner);
+		ArquillianPrimeFaces.assertValid(slider);
+		ArquillianPrimeFaces.assertValid(autoComplete);
+		ArquillianPrimeFaces.assertValid(selectOneMenu);
+		ArquillianPrimeFaces.assertValid(selectOneRadio);
+	}
+
+	@Test
+	public void testValidationErrors() {
+		open("stateful.xhtml");
+		ArquillianPrimeFaces.clickCommandButton(commandButton);
+		ArquillianPrimeFaces.assertInvalid(inputText);
+		ArquillianPrimeFaces.assertInvalid(inputNumber);
+		ArquillianPrimeFaces.assertInvalid(spinner);
+		ArquillianPrimeFaces.assertInvalid(slider);
+		ArquillianPrimeFaces.assertInvalid(autoComplete);
+		ArquillianPrimeFaces.assertInvalid(selectOneMenu);
+		ArquillianPrimeFaces.assertInvalid(selectOneRadio);
 	}
 
 	private void open(String page) {
