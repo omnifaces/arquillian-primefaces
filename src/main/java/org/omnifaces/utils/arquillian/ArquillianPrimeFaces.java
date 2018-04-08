@@ -113,6 +113,12 @@ public final class ArquillianPrimeFaces {
 
 	private static WebElement getNamingContainer(WebElement element) {
 		String clientId = element.getAttribute("id");
+		if(clientId == null) {
+			throw new IllegalArgumentException("element's id attribute mustn't be null");
+		}
+		if(clientId.isEmpty()) {
+			throw new IllegalArgumentException("element's id attribute mustn't be empty");
+		}
 		WebElement document = element.findElement(By.xpath("/*"));
 		return document.findElement(By.id(clientId.substring(0, clientId.lastIndexOf(':')))); // TODO: get separator character from JS.
 	}
@@ -154,6 +160,12 @@ public final class ArquillianPrimeFaces {
 	 */
 	public static String setSelectOneMenuValue(WebElement selectOneMenu, Serializable value) {
 		String clientId = selectOneMenu.getAttribute("id");
+		if(clientId == null) {
+			throw new IllegalArgumentException("element's id attribute mustn't be null");
+		}
+		if(clientId.isEmpty()) {
+			throw new IllegalArgumentException("element's id attribute mustn't be empty");
+		}
 		WebElement document = selectOneMenu.findElement(By.xpath("/*"));
 		WebElement input = document.findElement(By.id(clientId + "_input"));
 		String itemValue = value.toString();
@@ -182,7 +194,14 @@ public final class ArquillianPrimeFaces {
 	public static String setSelectOneRadioValue(WebElement selectOneRadio, Serializable value) {
 		String itemValue = value.toString();
 		WebElement input = selectOneRadio.findElement(By.cssSelector("input[value='" + itemValue + "']"));
-		String itemLabel = selectOneRadio.findElement(By.cssSelector("label[for='" + input.getAttribute("id") + "']")).getText();
+		String inputId = input.getAttribute("id");
+		if(inputId == null) {
+			throw new IllegalArgumentException("selectOneRadio's input id attribute mustn't be null");
+		}
+		if(inputId.isEmpty()) {
+			throw new IllegalArgumentException("selectOneRadion's input id attribute mustn't be empty");
+		}
+		String itemLabel = selectOneRadio.findElement(By.cssSelector("label[for='" + inputId + "']")).getText();
 		WebElement selectItem = input.findElement(By.xpath("ancestor::div[contains(@class,'ui-radiobutton')]")).findElement(By.cssSelector(".ui-radiobutton-box"));
 
 		if (!selectItem.getAttribute("class").contains("ui-state-active")) {
@@ -204,11 +223,23 @@ public final class ArquillianPrimeFaces {
 
 	public static void setInputMaskValue(WebElement inputMask, Serializable value) {
 		String clientId = inputMask.getAttribute("id");
+		if(clientId == null) {
+			throw new IllegalArgumentException("element's id attribute mustn't be null");
+		}
+		if(clientId.isEmpty()) {
+			throw new IllegalArgumentException("element's id attribute mustn't be empty");
+		}
 		executeScript("document.getElementById('" + clientId + "').value='" + value + "'"); // Selenium 3.7.0 bugs here with timing errors on WebElement#sendKeys(), hence JavaScript. TODO: check if it works in a newer Selenium version.
 	}
 
 	public static void setInputNumberValue(WebElement inputNumber, Number value) {
 		String clientId = inputNumber.getAttribute("id");
+		if(clientId == null) {
+			throw new IllegalArgumentException("element's id attribute mustn't be null");
+		}
+		if(clientId.isEmpty()) {
+			throw new IllegalArgumentException("element's id attribute mustn't be empty");
+		}
 		WebElement input = inputNumber.findElement(By.id(clientId + "_input"));
 		setInputTextValue(input, String.valueOf(value));
 	}
@@ -223,6 +254,12 @@ public final class ArquillianPrimeFaces {
 
 	public static void setAutoCompleteQuery(WebElement autoComplete, String query) {
 		String clientId = autoComplete.getAttribute("id");
+		if(clientId == null) {
+			throw new IllegalArgumentException("element's id attribute mustn't be null");
+		}
+		if(clientId.isEmpty()) {
+			throw new IllegalArgumentException("element's id attribute mustn't be empty");
+		}
 		WebElement input = autoComplete.findElement(By.id(clientId + "_input"));
 		setInputTextValue(input, query);
 		WebElement document = autoComplete.findElement(By.xpath("/*"));
@@ -232,6 +269,12 @@ public final class ArquillianPrimeFaces {
 
 	public static void setAutoCompleteValue(WebElement autoComplete, Serializable value) {
 		String clientId = autoComplete.getAttribute("id");
+		if(clientId == null) {
+			throw new IllegalArgumentException("element's id attribute mustn't be null");
+		}
+		if(clientId.isEmpty()) {
+			throw new IllegalArgumentException("element's id attribute mustn't be empty");
+		}
 		WebElement document = autoComplete.findElement(By.xpath("/*"));
 		document.findElement(By.cssSelector("[id='" + clientId + "_panel']")).findElement(By.cssSelector("[data-item-value='" + value + "']")).click(); // Select item.
 	}
