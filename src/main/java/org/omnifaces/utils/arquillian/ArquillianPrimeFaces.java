@@ -132,8 +132,11 @@ public final class ArquillianPrimeFaces {
 	// Inputs -----------------------------------------------------------------------------------------------------------------------------
 
 	public static boolean isValid(WebElement element) {
-		if (element.getAttribute("class").contains("ui-state-default")) { // <p:inputXxx>
-			return !element.getAttribute("class").contains("ui-state-error");
+		if (element.getAttribute("class").contains("ui-state-error")) {
+			return false;
+		}
+		else if (element.getAttribute("class").contains("ui-state-default")) { // <p:inputXxx>
+			return true;
 		}
 		else {
 			return isValid(element.findElement(By.cssSelector(".ui-state-default"))); // <p:inputXxx> with special wrapping markup (e.g. inputNumber, spinner, etc)
@@ -141,11 +144,11 @@ public final class ArquillianPrimeFaces {
 	}
 
 	public static void assertValid(WebElement element) {
-		assertTrue(isValid(element));
+		assertTrue("Must be valid: " + element, isValid(element));
 	}
 
 	public static void assertInvalid(WebElement element) {
-		assertFalse(isValid(element));
+		assertFalse("Must be invalid: " + element, isValid(element));
 	}
 
 	/**
@@ -191,6 +194,23 @@ public final class ArquillianPrimeFaces {
 			else {
 				selectItem.click();
 			}
+		}
+
+		return itemLabel;
+	}
+
+	/**
+	 * Returns the f:selectItem label associated with new value, may be useful for comparison/logging.
+	 */
+	public static String setSelectOneButtonValue(WebElement selectOneButton, Serializable value) {
+		String itemValue = value.toString();
+		WebElement input = selectOneButton.findElement(By.cssSelector("input[value='" + itemValue + "']"));
+		WebElement selectItem = input.findElement(By.xpath("ancestor::div[contains(@class,'ui-button')]"));
+		String itemLabel = selectItem.findElement(By.cssSelector(".ui-button-text")).getText();
+
+		if (!selectItem.getAttribute("class").contains("ui-state-active")) {
+			String clientId = input.getAttribute("id");
+			executeScript("document.getElementById('" + clientId + "').checked=true"); // Selenium 3.8.1 bugs here with being unable to check the hidden radiobutton. TODO: check if it works in a newer Selenium version.
 		}
 
 		return itemLabel;

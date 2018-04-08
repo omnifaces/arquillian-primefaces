@@ -48,6 +48,11 @@
 		</p:selectOneRadio>
 		<p:message id="selectOneRadioMessage" for="selectOneRadio" />
 
+		<p:selectOneButton id="selectOneButton" value="#{arquillianPrimeFacesITBean.selectOneButton}" required="true">
+			<f:selectItems value="#{arquillianPrimeFacesITBean.selectItems}" />
+		</p:selectOneButton>
+		<p:message id="selectOneButtonMessage" for="selectOneButton" />
+
 		<p:selectBooleanCheckbox id="selectBooleanCheckbox" value="#{arquillianPrimeFacesITBean.selectBooleanCheckbox}" />
 		<p:message id="selectBooleanCheckboxMessage" for="selectBooleanCheckbox" />
 

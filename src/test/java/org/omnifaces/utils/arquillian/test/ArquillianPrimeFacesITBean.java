@@ -35,6 +35,7 @@ public class ArquillianPrimeFacesITBean {
 	private String autoComplete;
 	private String selectOneMenu;
 	private String selectOneRadio;
+	private String selectOneButton;
 	private boolean selectBooleanCheckbox;
 	private Map<String, String> selectItems;
 
@@ -78,6 +79,7 @@ public class ArquillianPrimeFacesITBean {
 		results.put("autoComplete", autoComplete);
 		results.put("selectOneMenu", selectOneMenu);
 		results.put("selectOneRadio", selectOneRadio);
+		results.put("selectOneButton", selectOneButton);
 		results.put("selectBooleanCheckbox", selectBooleanCheckbox);
 		results.put("action", action);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(results.toString()));
@@ -146,6 +148,14 @@ public class ArquillianPrimeFacesITBean {
 
 	public void setSelectOneRadio(String selectOneRadio) {
 		this.selectOneRadio = selectOneRadio;
+	}
+
+	public String getSelectOneButton() {
+		return selectOneButton;
+	}
+
+	public void setSelectOneButton(String selectOneButton) {
+		this.selectOneButton = selectOneButton;
 	}
 
 	public Map<String, String> getSelectItems() {

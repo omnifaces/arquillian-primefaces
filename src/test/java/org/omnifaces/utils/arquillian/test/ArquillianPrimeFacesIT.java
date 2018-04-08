@@ -32,7 +32,11 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.omnifaces.utils.arquillian.ArquillianPrimeFaces;
 import org.openqa.selenium.WebDriver;
@@ -55,6 +59,18 @@ public class ArquillianPrimeFacesIT {
 			.addAsWebResource(packageName + "/stateless.xhtml")
 			.addAsWebResource(packageName + "/form.xhtml");
 	}
+
+	@Rule
+	public TestRule watcher = new TestWatcher() {
+		@Override
+		protected void starting(Description description) {
+			System.out.println("\nStarting " + description.getMethodName() + " ...");
+		}
+		@Override
+		protected void finished(Description description) {
+			System.out.println(description.getMethodName() + " finished!");
+		}
+	};
 
 	@Drone
 	private WebDriver browser;
@@ -85,6 +101,9 @@ public class ArquillianPrimeFacesIT {
 
 	@FindBy(id="form:selectOneRadio")
 	private WebElement selectOneRadio;
+
+	@FindBy(id="form:selectOneButton")
+	private WebElement selectOneButton;
 
 	@FindBy(id="form:selectBooleanCheckbox")
 	private WebElement selectBooleanCheckbox;
@@ -215,19 +234,6 @@ public class ArquillianPrimeFacesIT {
 	}
 
 	@Test
-	public void testValidInputs() {
-		open("stateful.xhtml");
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButton));
-		ArquillianPrimeFaces.assertValid(inputText);
-		ArquillianPrimeFaces.assertValid(inputNumber);
-		ArquillianPrimeFaces.assertValid(spinner);
-		ArquillianPrimeFaces.assertValid(slider);
-		ArquillianPrimeFaces.assertValid(autoComplete);
-		ArquillianPrimeFaces.assertValid(selectOneMenu);
-		ArquillianPrimeFaces.assertValid(selectOneRadio);
-	}
-
-	@Test
 	public void testValidationErrors() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.clickCommandButton(commandButton);
@@ -238,6 +244,7 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertInvalid(autoComplete);
 		ArquillianPrimeFaces.assertInvalid(selectOneMenu);
 		ArquillianPrimeFaces.assertInvalid(selectOneRadio);
+		ArquillianPrimeFaces.assertInvalid(selectOneButton);
 	}
 
 	@Test
@@ -251,6 +258,7 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertPresent(autoComplete);
 		ArquillianPrimeFaces.assertPresent(selectOneMenu);
 		ArquillianPrimeFaces.assertPresent(selectOneRadio);
+		ArquillianPrimeFaces.assertPresent(selectOneButton);
 		ArquillianPrimeFaces.assertPresent(selectBooleanCheckbox);
 		ArquillianPrimeFaces.assertPresent(commandButton);
 		ArquillianPrimeFaces.assertPresent(commandButtonWithRedirect);
@@ -271,8 +279,17 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "query", "Value 1");
 		ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, "Value 2");
 		ArquillianPrimeFaces.setSelectOneRadioValue(selectOneRadio, "Value 3");
+		ArquillianPrimeFaces.setSelectOneButtonValue(selectOneButton, "Value 2");
 		ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, true);
 		callback.run();
+		ArquillianPrimeFaces.assertValid(inputText);
+		ArquillianPrimeFaces.assertValid(inputNumber);
+		ArquillianPrimeFaces.assertValid(spinner);
+		ArquillianPrimeFaces.assertValid(slider);
+		ArquillianPrimeFaces.assertValid(autoComplete);
+		ArquillianPrimeFaces.assertValid(selectOneMenu);
+		ArquillianPrimeFaces.assertValid(selectOneRadio);
+		ArquillianPrimeFaces.assertValid(selectOneButton);
 	}
 
 	private void checkSubmittedValues(String action) {
@@ -284,6 +301,7 @@ public class ArquillianPrimeFacesIT {
 		results.put("autoComplete", "Value 1");
 		results.put("selectOneMenu", "Value 2");
 		results.put("selectOneRadio", "Value 3");
+		results.put("selectOneButton", "Value 2");
 		results.put("selectBooleanCheckbox", true);
 		results.put("action", action);
 		Assert.assertEquals(results.toString(), globalMessages.getText());
