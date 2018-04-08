@@ -109,7 +109,7 @@ public class ArquillianPrimeFacesIT {
 
 	@Before
 	public void init() {
-		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(5));
+		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(10));
 	}
 
 	@Test
