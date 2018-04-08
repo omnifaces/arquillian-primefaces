@@ -39,6 +39,8 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.omnifaces.utils.arquillian.ArquillianPrimeFaces;
+import org.omnifaces.utils.arquillian.Entropy;
+import org.omnifaces.utils.arquillian.test.ArquillianPrimeFacesITBean.Item;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -141,96 +143,84 @@ public class ArquillianPrimeFacesIT {
 	public void testStatefulWithCommandButton() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButton));
-		checkSubmittedValues("commandButton");
+		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButton), "commandButton");
 	}
 
 	@Test
 	public void testStatefulWithCommandButtonWithoutAjax() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax));
-		checkSubmittedValues("commandButtonWithoutAjax");
+		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax), "commandButtonWithoutAjax");
 	}
 
 	@Test
 	public void testStatefulWithCommandButtonWithRedirect() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButtonWithRedirect(commandButtonWithRedirect));
-		checkSubmittedValues("commandButtonWithRedirect");
+		submit(() -> ArquillianPrimeFaces.clickCommandButtonWithRedirect(commandButtonWithRedirect), "commandButtonWithRedirect");
 	}
 
 	@Test
 	public void testStatefulWithCommandLink() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLink));
-		checkSubmittedValues("commandLink");
+		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLink), "commandLink");
 	}
 
 	@Test
 	public void testStatefulWithCommandLinkWithoutAjax() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax));
-		checkSubmittedValues("commandLinkWithoutAjax");
+		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax), "commandLinkWithoutAjax");
 	}
 
 	@Test
 	public void testStatefulWithCommandLinkWithRedirect() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect));
-		checkSubmittedValues("commandLinkWithRedirect");
+		submit(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect), "commandLinkWithRedirect");
 	}
 
 	@Test
 	public void testStatelessWithCommandButton() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButton));
-		checkSubmittedValues("commandButton");
+		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButton), "commandButton");
 	}
 
 	@Test
 	public void testStatelessWithCommandButtonWithoutAjax() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax));
-		checkSubmittedValues("commandButtonWithoutAjax");
+		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax), "commandButtonWithoutAjax");
 	}
 
 	@Test
 	public void testStatelessWithCommandButtonWithRedirect() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButtonWithRedirect(commandButtonWithRedirect));
-		checkSubmittedValues("commandButtonWithRedirect");
+		submit(() -> ArquillianPrimeFaces.clickCommandButtonWithRedirect(commandButtonWithRedirect), "commandButtonWithRedirect");
 	}
 
 	@Test
 	public void testStatelessWithCommandLink() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLink));
-		checkSubmittedValues("commandLink");
+		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLink), "commandLink");
 	}
 
 	@Test
 	public void testStatelessWithCommandLinkWithoutAjax() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax));
-		checkSubmittedValues("commandLinkWithoutAjax");
+		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax), "commandLinkWithoutAjax");
 	}
 
 	@Test
 	public void testStatelessWithCommandLinkWithRedirect() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
-		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect));
-		checkSubmittedValues("commandLinkWithRedirect");
+		submit(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect), "commandLinkWithRedirect");
 	}
 
 	@Test
@@ -245,6 +235,7 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertInvalid(selectOneMenu);
 		ArquillianPrimeFaces.assertInvalid(selectOneRadio);
 		ArquillianPrimeFaces.assertInvalid(selectOneButton);
+		// Cannot assert checkbox invalid as required=true has no effect there.
 	}
 
 	@Test
@@ -271,21 +262,56 @@ public class ArquillianPrimeFacesIT {
 		browser.get(baseURL + page);
 	}
 
-	private void fillInputValues(Runnable callback) {
-		ArquillianPrimeFaces.setInputTextValue(inputText, "input");
-		ArquillianPrimeFaces.setInputNumberValue(inputNumber, 1);
-		ArquillianPrimeFaces.setSpinnerValue(spinner, 2);
-		ArquillianPrimeFaces.setSliderValue(slider, 3);
-		String autoCompleteLabel = ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "query", "Value 1");
-		Assert.assertEquals("Value 1", autoCompleteLabel);
-		String selectOneMenuLabel = ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, "Value 2");
-		Assert.assertEquals("Label 2", selectOneMenuLabel);
-		String selectOneRadioLabel = ArquillianPrimeFaces.setSelectOneRadioValue(selectOneRadio, "Value 3");
-		Assert.assertEquals("Label 3", selectOneRadioLabel);
-		String selectOneButtonLabel = ArquillianPrimeFaces.setSelectOneButtonValue(selectOneButton, "Value 2");
-		Assert.assertEquals("Label 2", selectOneButtonLabel);
-		ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, true);
-		callback.run();
+	private void submit(Runnable command, String commandName) {
+		Map<String, Serializable> inputValues = fillInputValues(command);
+		checkSubmittedValues(inputValues, commandName);
+	}
+
+	private Map<String, Serializable> fillInputValues(Runnable command) {
+		Map<String, Serializable> inputValues = new LinkedHashMap<>();
+
+		String inputTextValue = Entropy.getRandomString();
+		inputValues.put("inputText", inputTextValue);
+		ArquillianPrimeFaces.setInputTextValue(inputText, inputTextValue);
+
+		Number inputNumberValue = Entropy.getRandomNumberBetween(1, 100);
+		inputValues.put("inputNumber", inputNumberValue);
+		ArquillianPrimeFaces.setInputNumberValue(inputNumber, inputNumberValue);
+
+		Number spinnerValue = Entropy.getRandomNumberBetween(1, 100);
+		inputValues.put("spinner", spinnerValue);
+		ArquillianPrimeFaces.setSpinnerValue(spinner, spinnerValue);
+
+		Number sliderValue = Entropy.getRandomNumberBetween(1, 100);
+		inputValues.put("slider", sliderValue);
+		ArquillianPrimeFaces.setSliderValue(slider, sliderValue);
+
+		String autoCompleteValue = Entropy.getRandomEnumValue(Item.class).getLabel();
+		inputValues.put("autoComplete", autoCompleteValue);
+		String autoCompleteLabel = ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "query", autoCompleteValue);
+		Assert.assertEquals(autoCompleteValue, autoCompleteLabel);
+
+		Item selectOneMenuValue = Entropy.getRandomEnumValue(Item.class);
+		inputValues.put("selectOneMenu", selectOneMenuValue);
+		String selectOneMenuLabel = ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, selectOneMenuValue);
+		Assert.assertEquals(selectOneMenuValue.getLabel(), selectOneMenuLabel);
+
+		Item selectOneRadioValue = Entropy.getRandomEnumValue(Item.class);
+		inputValues.put("selectOneRadio", selectOneRadioValue);
+		String selectOneRadioLabel = ArquillianPrimeFaces.setSelectOneRadioValue(selectOneRadio, selectOneRadioValue);
+		Assert.assertEquals(selectOneRadioValue.getLabel(), selectOneRadioLabel);
+
+		Item selectOneButtonValue = Entropy.getRandomEnumValue(Item.class);
+		inputValues.put("selectOneButton", selectOneButtonValue);
+		String selectOneButtonLabel = ArquillianPrimeFaces.setSelectOneButtonValue(selectOneButton, selectOneButtonValue);
+		Assert.assertEquals(selectOneButtonValue.getLabel(), selectOneButtonLabel);
+
+		boolean selectBooleanCheckboxChecked = true;
+		inputValues.put("selectBooleanCheckbox", selectBooleanCheckboxChecked);
+		ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, selectBooleanCheckboxChecked);
+
+		command.run();
+
 		ArquillianPrimeFaces.assertValid(inputText);
 		ArquillianPrimeFaces.assertValid(inputNumber);
 		ArquillianPrimeFaces.assertValid(spinner);
@@ -294,21 +320,14 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertValid(selectOneMenu);
 		ArquillianPrimeFaces.assertValid(selectOneRadio);
 		ArquillianPrimeFaces.assertValid(selectOneButton);
+		ArquillianPrimeFaces.assertValid(selectBooleanCheckbox);
+
+		return inputValues;
 	}
 
-	private void checkSubmittedValues(String action) {
-		Map<String, Serializable> results = new LinkedHashMap<>();
-		results.put("inputText", "input");
-		results.put("inputNumber", 1);
-		results.put("spinner", 2);
-		results.put("slider", 3);
-		results.put("autoComplete", "Value 1");
-		results.put("selectOneMenu", "Value 2");
-		results.put("selectOneRadio", "Value 3");
-		results.put("selectOneButton", "Value 2");
-		results.put("selectBooleanCheckbox", true);
-		results.put("action", action);
-		Assert.assertEquals(results.toString(), globalMessages.getText());
+	private void checkSubmittedValues(Map<String, Serializable> inputValues, String commandName) {
+		inputValues.put("command", commandName);
+		Assert.assertEquals(inputValues.toString(), globalMessages.getText());
 	}
 
 }

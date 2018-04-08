@@ -14,6 +14,7 @@ package org.omnifaces.utils.arquillian.test;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,24 @@ import javax.inject.Named;
 @RequestScoped
 public class ArquillianPrimeFacesITBean {
 
+	public enum Item {
+		VALUE1("Label 1"),
+		VALUE2("Label 2"),
+		VALUE3("Label 3"),
+		VALUE4("Label 4"),
+		VALUE5("Label 5");
+
+		private final String label;
+
+		private Item(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+	}
+
 	private String inputText;
 	private Integer inputNumber;
 	private Integer spinner;
@@ -37,23 +56,25 @@ public class ArquillianPrimeFacesITBean {
 	private String selectOneRadio;
 	private String selectOneButton;
 	private boolean selectBooleanCheckbox;
-	private Map<String, String> selectItems;
+	private Map<String, Item> selectItems;
 
 	@PostConstruct
 	public void init() {
 		selectItems = new LinkedHashMap<>();
-		selectItems.put("", "");
-		selectItems.put("Label 1", "Value 1");
-		selectItems.put("Label 2", "Value 2");
-		selectItems.put("Label 3", "Value 3");
+		selectItems.put("", null);
+		Arrays.stream(Item.values()).forEach(item -> selectItems.put(item.getLabel(), item));
 	}
 
 	public List<String> completeMethod(String query) {
-		return new ArrayList<>(selectItems.values());
+		return new ArrayList<>(selectItems.keySet());
 	}
 
 	public void commandButton() {
-		addGlobalMessage("commandButton" + (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest() ? "" : "WithoutAjax"));
+		addGlobalMessage("commandButton");
+	}
+
+	public void commandButtonWithoutAjax() {
+		addGlobalMessage("commandButtonWithoutAjax");
 	}
 
 	public String commandButtonWithRedirect() {
@@ -62,7 +83,11 @@ public class ArquillianPrimeFacesITBean {
 	}
 
 	public void commandLink() {
-		addGlobalMessage("commandLink" + (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest() ? "" : "WithoutAjax"));
+		addGlobalMessage("commandLink");
+	}
+
+	public void commandLinkWithoutAjax() {
+		addGlobalMessage("commandLinkWithoutAjax");
 	}
 
 	public String commandLinkWithRedirect() {
@@ -70,7 +95,7 @@ public class ArquillianPrimeFacesITBean {
 		return getViewIdWithRedirect();
 	}
 
-	private void addGlobalMessage(String action) {
+	private void addGlobalMessage(String command) {
 		Map<String, Serializable> results = new LinkedHashMap<>();
 		results.put("inputText", inputText);
 		results.put("inputNumber", inputNumber);
@@ -81,7 +106,7 @@ public class ArquillianPrimeFacesITBean {
 		results.put("selectOneRadio", selectOneRadio);
 		results.put("selectOneButton", selectOneButton);
 		results.put("selectBooleanCheckbox", selectBooleanCheckbox);
-		results.put("action", action);
+		results.put("command", command);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(results.toString()));
 	}
 
@@ -158,7 +183,7 @@ public class ArquillianPrimeFacesITBean {
 		this.selectOneButton = selectOneButton;
 	}
 
-	public Map<String, String> getSelectItems() {
+	public Map<String, Item> getSelectItems() {
 		return selectItems;
 	}
 
