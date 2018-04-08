@@ -52,7 +52,7 @@ public class ArquillianPrimeFacesITBean {
 	}
 
 	public void commandButton() {
-		addGlobalMessage("commandButton");
+		addGlobalMessage("commandButton" + (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest() ? "" : "WithoutAjax"));
 	}
 
 	public String commandButtonWithRedirect() {
@@ -61,7 +61,7 @@ public class ArquillianPrimeFacesITBean {
 	}
 
 	public void commandLink() {
-		addGlobalMessage("commandLink");
+		addGlobalMessage("commandLink" + (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest() ? "" : "WithoutAjax"));
 	}
 
 	public String commandLinkWithRedirect() {

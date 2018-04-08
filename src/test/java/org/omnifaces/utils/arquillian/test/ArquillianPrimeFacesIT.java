@@ -92,11 +92,17 @@ public class ArquillianPrimeFacesIT {
 	@FindBy(id="form:commandButton")
 	private WebElement commandButton;
 
+	@FindBy(id="form:commandButtonWithoutAjax")
+	private WebElement commandButtonWithoutAjax;
+
 	@FindBy(id="form:commandButtonWithRedirect")
 	private WebElement commandButtonWithRedirect;
 
 	@FindBy(id="form:commandLink")
 	private WebElement commandLink;
+
+	@FindBy(id="form:commandLinkWithoutAjax")
+	private WebElement commandLinkWithoutAjax;
 
 	@FindBy(id="form:commandLinkWithRedirect")
 	private WebElement commandLinkWithRedirect;
@@ -121,6 +127,14 @@ public class ArquillianPrimeFacesIT {
 	}
 
 	@Test
+	public void testStatefulWithCommandButtonWithoutAjax() {
+		open("stateful.xhtml");
+		ArquillianPrimeFaces.assertStateful(form);
+		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax));
+		checkSubmittedValues("commandButtonWithoutAjax");
+	}
+
+	@Test
 	public void testStatefulWithCommandButtonWithRedirect() {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
@@ -134,6 +148,14 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertStateful(form);
 		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLink));
 		checkSubmittedValues("commandLink");
+	}
+
+	@Test
+	public void testStatefulWithCommandLinkWithoutAjax() {
+		open("stateful.xhtml");
+		ArquillianPrimeFaces.assertStateful(form);
+		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax));
+		checkSubmittedValues("commandLinkWithoutAjax");
 	}
 
 	@Test
@@ -153,6 +175,14 @@ public class ArquillianPrimeFacesIT {
 	}
 
 	@Test
+	public void testStatelessWithCommandButtonWithoutAjax() {
+		open("stateless.xhtml");
+		ArquillianPrimeFaces.assertStateless(form);
+		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax));
+		checkSubmittedValues("commandButtonWithoutAjax");
+	}
+
+	@Test
 	public void testStatelessWithCommandButtonWithRedirect() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
@@ -166,6 +196,14 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertStateless(form);
 		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLink));
 		checkSubmittedValues("commandLink");
+	}
+
+	@Test
+	public void testStatelessWithCommandLinkWithoutAjax() {
+		open("stateless.xhtml");
+		ArquillianPrimeFaces.assertStateless(form);
+		fillInputValues(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax));
+		checkSubmittedValues("commandLinkWithoutAjax");
 	}
 
 	@Test
