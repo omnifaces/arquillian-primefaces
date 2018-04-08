@@ -276,10 +276,14 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.setInputNumberValue(inputNumber, 1);
 		ArquillianPrimeFaces.setSpinnerValue(spinner, 2);
 		ArquillianPrimeFaces.setSliderValue(slider, 3);
-		ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "query", "Value 1");
-		ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, "Value 2");
-		ArquillianPrimeFaces.setSelectOneRadioValue(selectOneRadio, "Value 3");
-		ArquillianPrimeFaces.setSelectOneButtonValue(selectOneButton, "Value 2");
+		String autoCompleteLabel = ArquillianPrimeFaces.setAutoCompleteValue(autoComplete, "query", "Value 1");
+		Assert.assertEquals("Value 1", autoCompleteLabel);
+		String selectOneMenuLabel = ArquillianPrimeFaces.setSelectOneMenuValue(selectOneMenu, "Value 2");
+		Assert.assertEquals("Label 2", selectOneMenuLabel);
+		String selectOneRadioLabel = ArquillianPrimeFaces.setSelectOneRadioValue(selectOneRadio, "Value 3");
+		Assert.assertEquals("Label 3", selectOneRadioLabel);
+		String selectOneButtonLabel = ArquillianPrimeFaces.setSelectOneButtonValue(selectOneButton, "Value 2");
+		Assert.assertEquals("Label 2", selectOneButtonLabel);
 		ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, true);
 		callback.run();
 		ArquillianPrimeFaces.assertValid(inputText);

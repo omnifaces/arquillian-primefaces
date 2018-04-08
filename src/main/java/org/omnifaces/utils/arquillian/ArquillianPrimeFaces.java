@@ -236,7 +236,8 @@ public final class ArquillianPrimeFaces {
 		String itemValue = value.toString();
 		WebElement input = selectOneRadio.findElement(By.cssSelector("input[value='" + itemValue + "']"));
 		String itemLabel = selectOneRadio.findElement(By.cssSelector("label[for='" + input.getAttribute("id") + "']")).getText();
-		WebElement selectItem = input.findElement(By.xpath("ancestor::div[contains(@class,'ui-radiobutton')]")).findElement(By.cssSelector(".ui-radiobutton-box"));
+		WebElement findElement = input.findElement(By.xpath("ancestor::div[contains(@class,'ui-radiobutton')]"));
+		WebElement selectItem = findElement.findElement(By.cssSelector(".ui-radiobutton-box"));
 
 		if (!selectItem.getAttribute("class").contains("ui-state-active")) {
 			if (input.getAttribute("onchange") != null) {
@@ -259,12 +260,11 @@ public final class ArquillianPrimeFaces {
 	public static String setSelectOneButtonValue(WebElement selectOneButton, Serializable value) {
 		String itemValue = value.toString();
 		WebElement input = selectOneButton.findElement(By.cssSelector("input[value='" + itemValue + "']"));
-		WebElement selectItem = input.findElement(By.xpath("ancestor::div[contains(@class,'ui-button')]"));
+		WebElement selectItem = input.findElement(By.xpath("ancestor::div[contains(@class,'ui-state-default')]"));
 		String itemLabel = selectItem.findElement(By.cssSelector(".ui-button-text")).getText();
 
 		if (!selectItem.getAttribute("class").contains("ui-state-active")) {
-			String clientId = input.getAttribute("id");
-			executeScript("document.getElementById('" + clientId + "').checked=true"); // Selenium 3.8.1 bugs here with being unable to check the hidden radiobutton. TODO: check if it works in a newer Selenium version.
+			selectItem.click();
 		}
 
 		return itemLabel;
@@ -336,23 +336,29 @@ public final class ArquillianPrimeFaces {
 	/**
 	 * Set the selected value of a p:autoComplete.
 	 * @param autoComplete The element representing the p:autoComplete.
-	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 * @param value The selected value. This must match the item value (not label!).
+	 * @return The label associated with the selected value, may be useful for comparison/logging.
 	 */
-	public static void setAutoCompleteValue(WebElement autoComplete, Serializable value) {
+	public static String setAutoCompleteValue(WebElement autoComplete, Serializable value) {
 		String clientId = autoComplete.getAttribute("id");
 		WebElement document = autoComplete.findElement(By.xpath("/*"));
-		document.findElement(By.cssSelector("[id='" + clientId + "_panel']")).findElement(By.cssSelector("[data-item-value='" + value + "']")).click(); // Select item.
+		WebElement panel = document.findElement(By.id(clientId + "_panel"));
+		WebElement selectItem = panel.findElement(By.cssSelector("[data-item-value='" + value + "']"));
+		String itemLabel = selectItem.getAttribute("data-item-label");
+		selectItem.click();
+		return itemLabel;
 	}
 
 	/**
 	 * Set the query and then the selected value of a p:autoComplete.
 	 * @param autoComplete The element representing the p:autoComplete.
 	 * @param query The query to run auto complete for.
-	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 * @param value The selected value. This must match the item value (not label!).
+	 * @return The label associated with the selected value, may be useful for comparison/logging.
 	 */
-	public static void setAutoCompleteValue(WebElement autoComplete, String query, Serializable value) {
+	public static String setAutoCompleteValue(WebElement autoComplete, String query, Serializable value) {
 		setAutoCompleteQuery(autoComplete, query);
-		setAutoCompleteValue(autoComplete, value);
+		return setAutoCompleteValue(autoComplete, value);
 	}
 
 	/**
