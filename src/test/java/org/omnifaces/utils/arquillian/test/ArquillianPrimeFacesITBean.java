@@ -28,137 +28,137 @@ import javax.inject.Named;
 @RequestScoped
 public class ArquillianPrimeFacesITBean {
 
-	private String inputText;
-	private Integer inputNumber;
-	private Integer spinner;
-	private Integer slider;
-	private String autoComplete;
-	private String selectOneMenu;
-	private String selectOneRadio;
-	private boolean selectBooleanCheckbox;
-	private Map<String, String> selectItems;
+    private String inputText;
+    private Integer inputNumber;
+    private Integer spinner;
+    private Integer slider;
+    private String autoComplete;
+    private String selectOneMenu;
+    private String selectOneRadio;
+    private boolean selectBooleanCheckbox;
+    private Map<String, String> selectItems;
 
-	@PostConstruct
-	public void init() {
-		selectItems = new LinkedHashMap<>();
-		selectItems.put("", "");
-		selectItems.put("Label 1", "Value 1");
-		selectItems.put("Label 2", "Value 2");
-		selectItems.put("Label 3", "Value 3");
-	}
+    @PostConstruct
+    public void init() {
+        selectItems = new LinkedHashMap<>();
+        selectItems.put("", "");
+        selectItems.put("Label 1", "Value 1");
+        selectItems.put("Label 2", "Value 2");
+        selectItems.put("Label 3", "Value 3");
+    }
 
-	public List<String> completeMethod(String query) {
-		return new ArrayList<>(selectItems.values());
-	}
+    public List<String> completeMethod(String query) {
+        return new ArrayList<>(selectItems.values());
+    }
 
-	public void commandButton() {
-		addGlobalMessage("commandButton");
-	}
+    public void commandButton() {
+        addGlobalMessage("commandButton");
+    }
 
-	public String commandButtonWithRedirect() {
-		addFlashGlobalMessage("commandButtonWithRedirect");
-		return getViewIdWithRedirect();
-	}
+    public String commandButtonWithRedirect() {
+        addFlashGlobalMessage("commandButtonWithRedirect");
+        return getViewIdWithRedirect();
+    }
 
-	public void commandLink() {
-		addGlobalMessage("commandLink");
-	}
+    public void commandLink() {
+        addGlobalMessage("commandLink");
+    }
 
-	public String commandLinkWithRedirect() {
-		addFlashGlobalMessage("commandLinkWithRedirect");
-		return getViewIdWithRedirect();
-	}
+    public String commandLinkWithRedirect() {
+        addFlashGlobalMessage("commandLinkWithRedirect");
+        return getViewIdWithRedirect();
+    }
 
-	private void addGlobalMessage(String action) {
-		Map<String, Serializable> results = new LinkedHashMap<>();
-		results.put("inputText", inputText);
-		results.put("inputNumber", inputNumber);
-		results.put("spinner", spinner);
-		results.put("slider", slider);
-		results.put("autoComplete", autoComplete);
-		results.put("selectOneMenu", selectOneMenu);
-		results.put("selectOneRadio", selectOneRadio);
-		results.put("selectBooleanCheckbox", selectBooleanCheckbox);
-		results.put("action", action);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(results.toString()));
-	}
+    private void addGlobalMessage(String action) {
+        Map<String, Serializable> results = new LinkedHashMap<>();
+        results.put("inputText", inputText);
+        results.put("inputNumber", inputNumber);
+        results.put("spinner", spinner);
+        results.put("slider", slider);
+        results.put("autoComplete", autoComplete);
+        results.put("selectOneMenu", selectOneMenu);
+        results.put("selectOneRadio", selectOneRadio);
+        results.put("selectBooleanCheckbox", selectBooleanCheckbox);
+        results.put("action", action);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(results.toString()));
+    }
 
-	private void addFlashGlobalMessage(String globalMessage) {
-		addGlobalMessage(globalMessage);
-		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-	}
+    private void addFlashGlobalMessage(String globalMessage) {
+        addGlobalMessage(globalMessage);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
 
-	private String getViewIdWithRedirect() {
-		return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true";
-	}
+    private String getViewIdWithRedirect() {
+        return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true";
+    }
 
-	public String getInputText() {
-		return inputText;
-	}
+    public String getInputText() {
+        return inputText;
+    }
 
-	public void setInputText(String inputText) {
-		this.inputText = inputText;
-	}
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
+    }
 
-	public Integer getInputNumber() {
-		return inputNumber;
-	}
+    public Integer getInputNumber() {
+        return inputNumber;
+    }
 
-	public void setInputNumber(Integer inputNumber) {
-		this.inputNumber = inputNumber;
-	}
+    public void setInputNumber(Integer inputNumber) {
+        this.inputNumber = inputNumber;
+    }
 
-	public Integer getSlider() {
-		return slider;
-	}
+    public Integer getSlider() {
+        return slider;
+    }
 
-	public void setSlider(Integer slider) {
-		this.slider = slider;
-	}
+    public void setSlider(Integer slider) {
+        this.slider = slider;
+    }
 
-	public Integer getSpinner() {
-		return spinner;
-	}
+    public Integer getSpinner() {
+        return spinner;
+    }
 
-	public void setSpinner(Integer spinner) {
-		this.spinner = spinner;
-	}
+    public void setSpinner(Integer spinner) {
+        this.spinner = spinner;
+    }
 
-	public String getAutoComplete() {
-		return autoComplete;
-	}
+    public String getAutoComplete() {
+        return autoComplete;
+    }
 
-	public void setAutoComplete(String autoComplete) {
-		this.autoComplete = autoComplete;
-	}
+    public void setAutoComplete(String autoComplete) {
+        this.autoComplete = autoComplete;
+    }
 
-	public String getSelectOneMenu() {
-		return selectOneMenu;
-	}
+    public String getSelectOneMenu() {
+        return selectOneMenu;
+    }
 
-	public void setSelectOneMenu(String selectOneMenu) {
-		this.selectOneMenu = selectOneMenu;
-	}
+    public void setSelectOneMenu(String selectOneMenu) {
+        this.selectOneMenu = selectOneMenu;
+    }
 
-	public String getSelectOneRadio() {
-		return selectOneRadio;
-	}
+    public String getSelectOneRadio() {
+        return selectOneRadio;
+    }
 
-	public void setSelectOneRadio(String selectOneRadio) {
-		this.selectOneRadio = selectOneRadio;
-	}
+    public void setSelectOneRadio(String selectOneRadio) {
+        this.selectOneRadio = selectOneRadio;
+    }
 
-	public Map<String, String> getSelectItems() {
-		return selectItems;
-	}
+    public Map<String, String> getSelectItems() {
+        return selectItems;
+    }
 
-	public boolean isSelectBooleanCheckbox() {
-		return selectBooleanCheckbox;
-	}
+    public boolean isSelectBooleanCheckbox() {
+        return selectBooleanCheckbox;
+    }
 
-	public void setSelectBooleanCheckbox(boolean selectBooleanCheckbox) {
-		this.selectBooleanCheckbox = selectBooleanCheckbox;
-	}
+    public void setSelectBooleanCheckbox(boolean selectBooleanCheckbox) {
+        this.selectBooleanCheckbox = selectBooleanCheckbox;
+    }
 
 
 }
