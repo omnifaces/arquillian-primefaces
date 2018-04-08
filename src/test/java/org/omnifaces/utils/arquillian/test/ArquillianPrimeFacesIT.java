@@ -104,6 +104,9 @@ public class ArquillianPrimeFacesIT {
 	@FindBy(id="form:globalMessages")
 	private WebElement globalMessages;
 
+	@FindBy(id="form:absent")
+	private WebElement absent;
+
 	@Before
 	public void init() {
 		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(5));
@@ -114,13 +117,6 @@ public class ArquillianPrimeFacesIT {
 		open("stateful.xhtml");
 		ArquillianPrimeFaces.assertStateful(form);
 		fillInputValues(() -> ArquillianPrimeFaces.clickCommandButton(commandButton));
-		ArquillianPrimeFaces.assertValid(inputText);
-		ArquillianPrimeFaces.assertValid(inputNumber);
-		ArquillianPrimeFaces.assertValid(spinner);
-		ArquillianPrimeFaces.assertValid(slider);
-		ArquillianPrimeFaces.assertValid(autoComplete);
-		ArquillianPrimeFaces.assertValid(selectOneMenu);
-		ArquillianPrimeFaces.assertValid(selectOneRadio);
 		checkSubmittedValues("commandButton");
 	}
 
@@ -204,6 +200,25 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertInvalid(autoComplete);
 		ArquillianPrimeFaces.assertInvalid(selectOneMenu);
 		ArquillianPrimeFaces.assertInvalid(selectOneRadio);
+	}
+
+	@Test
+	public void testPresence() {
+		open("stateful.xhtml");
+		ArquillianPrimeFaces.assertPresent(form);
+		ArquillianPrimeFaces.assertPresent(inputText);
+		ArquillianPrimeFaces.assertPresent(inputNumber);
+		ArquillianPrimeFaces.assertPresent(spinner);
+		ArquillianPrimeFaces.assertPresent(slider);
+		ArquillianPrimeFaces.assertPresent(autoComplete);
+		ArquillianPrimeFaces.assertPresent(selectOneMenu);
+		ArquillianPrimeFaces.assertPresent(selectOneRadio);
+		ArquillianPrimeFaces.assertPresent(selectBooleanCheckbox);
+		ArquillianPrimeFaces.assertPresent(commandButton);
+		ArquillianPrimeFaces.assertPresent(commandButtonWithRedirect);
+		ArquillianPrimeFaces.assertPresent(commandLink);
+		ArquillianPrimeFaces.assertPresent(commandLinkWithRedirect);
+		ArquillianPrimeFaces.assertAbsent(absent);
 	}
 
 	private void open(String page) {

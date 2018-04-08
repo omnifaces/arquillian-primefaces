@@ -83,7 +83,6 @@ public final class ArquillianPrimeFaces {
 	public static void assertPresent(WebElement element) {
 		try {
 			assertTrue(element.isDisplayed());
-			assertFalse(element.getText(), element.getText().isEmpty());
 		}
 		catch (NoSuchElementException e) {
 			fail(e.toString());
