@@ -39,6 +39,10 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+/**
+ *
+ * @author Bauke Scholtz
+ */
 public final class ArquillianPrimeFaces {
 
 	private ArquillianPrimeFaces() {
@@ -51,6 +55,8 @@ public final class ArquillianPrimeFaces {
 	/**
 	 * Allows more flexible programmatic configuration as to wait timeouts.
 	 * Graphene#guardXxx() namely doesn't support specifying custom timeouts and defaults to 2~3 seconds which may be too low sometimes.
+	 * @param browser The browser.
+	 * @param timeout The timeout.
 	 */
 	public static void configureTimeouts(WebDriver browser, Duration timeout) {
         while (browser instanceof GrapheneProxyInstance) {
@@ -80,6 +86,10 @@ public final class ArquillianPrimeFaces {
 
 	// General ----------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Assert that given element is displayed.
+	 * @param element The element to be checked.
+	 */
 	public static void assertPresent(WebElement element) {
 		try {
 			assertTrue(element.isDisplayed());
@@ -89,6 +99,10 @@ public final class ArquillianPrimeFaces {
 		}
 	}
 
+	/**
+	 * Assert that given element is not displayed.
+	 * @param element The element to be checked.
+	 */
 	public static void assertAbsent(WebElement element) {
 		try {
 			assertFalse(element.isDisplayed());
@@ -101,6 +115,11 @@ public final class ArquillianPrimeFaces {
 
 	// Forms ------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns the parent form element associated with given form-based element.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 * @return The parent form element.
+	 */
 	public static WebElement getForm(WebElement element) {
 		if (element.getTagName().equals("form")) {
 			return element;
@@ -116,14 +135,27 @@ public final class ArquillianPrimeFaces {
 		return document.findElement(By.id(clientId.substring(0, clientId.lastIndexOf(':')))); // TODO: get separator character from JS.
 	}
 
+	/**
+	 * Returns the view state hidden input element associated with given form-based element.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 * @return The view state hidden input element associated with given form-based element.
+	 */
 	public static String getViewState(WebElement element) {
 		return getForm(element).findElement(By.name("javax.faces.ViewState")).getAttribute("value");
 	}
 
+	/**
+	 * Assert that the given form-based element is in a stateless view.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 */
 	public static void assertStateless(WebElement element) {
 		assertEquals("stateless", getViewState(element));
 	}
 
+	/**
+	 * Assert that the given form-based element is in a stateful view.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 */
 	public static void assertStateful(WebElement element) {
 		assertNotEquals("stateless", getViewState(element));
 	}
@@ -131,6 +163,11 @@ public final class ArquillianPrimeFaces {
 
 	// Inputs -----------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Returns whether given form-based element is valid.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 * @return Whether given form-based element is valid.
+	 */
 	public static boolean isValid(WebElement element) {
 		if (element.getAttribute("class").contains("ui-state-error")) {
 			return false;
@@ -143,16 +180,27 @@ public final class ArquillianPrimeFaces {
 		}
 	}
 
+	/**
+	 * Assert that the given form-based element is valid.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 */
 	public static void assertValid(WebElement element) {
 		assertTrue("Must be valid: " + element, isValid(element));
 	}
 
+	/**
+	 * Assert that the given form-based element is invalid.
+	 * @param element The form-based element, e.g. form/input/select/textarea/button, anything which is inside a form.
+	 */
 	public static void assertInvalid(WebElement element) {
 		assertFalse("Must be invalid: " + element, isValid(element));
 	}
 
 	/**
-	 * Returns the f:selectItem label associated with new value, may be useful for comparison/logging.
+	 * Set the selected value of a p:selectOneMenu.
+	 * @param selectOneMenu The element representing the p:selectOneMenu.
+	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 * @return The f:selectItem label associated with the selected value, may be useful for comparison/logging.
 	 */
 	public static String setSelectOneMenuValue(WebElement selectOneMenu, Serializable value) {
 		String clientId = selectOneMenu.getAttribute("id");
@@ -179,7 +227,10 @@ public final class ArquillianPrimeFaces {
 	}
 
 	/**
-	 * Returns the f:selectItem label associated with new value, may be useful for comparison/logging.
+	 * Set the selected value of a p:selectOneRadio.
+	 * @param selectOneRadio The element representing the p:selectOneRadio.
+	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 * @return The f:selectItem label associated with the selected value, may be useful for comparison/logging.
 	 */
 	public static String setSelectOneRadioValue(WebElement selectOneRadio, Serializable value) {
 		String itemValue = value.toString();
@@ -200,7 +251,10 @@ public final class ArquillianPrimeFaces {
 	}
 
 	/**
-	 * Returns the f:selectItem label associated with new value, may be useful for comparison/logging.
+	 * Set the selected value of a p:selectOneButton.
+	 * @param selectOneButton The element representing the p:selectOneButton.
+	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 * @return The f:selectItem label associated with the selected value, may be useful for comparison/logging.
 	 */
 	public static String setSelectOneButtonValue(WebElement selectOneButton, Serializable value) {
 		String itemValue = value.toString();
@@ -216,30 +270,60 @@ public final class ArquillianPrimeFaces {
 		return itemLabel;
 	}
 
+	/**
+	 * Set the value of a p:inputText.
+	 * @param inputText The element representing the p:inputText.
+	 * @param value The input value.
+	 */
 	public static void setInputTextValue(WebElement inputText, Serializable value) {
 		inputText.clear();
 		inputText.sendKeys(value.toString());
 	}
 
+	/**
+	 * Set the value of a p:inputMask.
+	 * @param inputMask The element representing the p:inputMask.
+	 * @param value The input value.
+	 */
 	public static void setInputMaskValue(WebElement inputMask, Serializable value) {
 		String clientId = inputMask.getAttribute("id");
 		executeScript("document.getElementById('" + clientId + "').value='" + value + "'"); // Selenium 3.7.0 bugs here with timing errors on WebElement#sendKeys(), hence JavaScript. TODO: check if it works in a newer Selenium version.
 	}
 
+	/**
+	 * Set the value of a p:inputNumber.
+	 * @param inputNumber The element representing the p:inputNumber.
+	 * @param value The input value.
+	 */
 	public static void setInputNumberValue(WebElement inputNumber, Number value) {
 		String clientId = inputNumber.getAttribute("id");
 		WebElement input = inputNumber.findElement(By.id(clientId + "_input"));
 		setInputTextValue(input, String.valueOf(value));
 	}
 
+	/**
+	 * Set the value of a p:spinner.
+	 * @param spinner The element representing the p:spinner.
+	 * @param value The input value.
+	 */
 	public static void setSpinnerValue(WebElement spinner, Number value) {
 		setInputNumberValue(spinner, value);
 	}
 
+	/**
+	 * Set the value of a p:inputXxx having a p:slider.
+	 * @param slider The element representing the p:inputXxx having a p:slider.
+	 * @param value The input value.
+	 */
 	public static void setSliderValue(WebElement slider, Number value) {
 		setInputTextValue(slider, value);
 	}
 
+	/**
+	 * Set the query of a p:autoComplete.
+	 * @param autoComplete The element representing the p:autoComplete.
+	 * @param query The query to run auto complete for.
+	 */
 	public static void setAutoCompleteQuery(WebElement autoComplete, String query) {
 		String clientId = autoComplete.getAttribute("id");
 		WebElement input = autoComplete.findElement(By.id(clientId + "_input"));
@@ -249,17 +333,33 @@ public final class ArquillianPrimeFaces {
 		waitGui().until(or(visibilityOf(panel), attributeContains(input, "class", "ui-state-error")));
 	}
 
+	/**
+	 * Set the selected value of a p:autoComplete.
+	 * @param autoComplete The element representing the p:autoComplete.
+	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 */
 	public static void setAutoCompleteValue(WebElement autoComplete, Serializable value) {
 		String clientId = autoComplete.getAttribute("id");
 		WebElement document = autoComplete.findElement(By.xpath("/*"));
 		document.findElement(By.cssSelector("[id='" + clientId + "_panel']")).findElement(By.cssSelector("[data-item-value='" + value + "']")).click(); // Select item.
 	}
 
+	/**
+	 * Set the query and then the selected value of a p:autoComplete.
+	 * @param autoComplete The element representing the p:autoComplete.
+	 * @param query The query to run auto complete for.
+	 * @param value The selected value. This must match the f:selectItem value (not label!).
+	 */
 	public static void setAutoCompleteValue(WebElement autoComplete, String query, Serializable value) {
 		setAutoCompleteQuery(autoComplete, query);
 		setAutoCompleteValue(autoComplete, value);
 	}
 
+	/**
+	 * Set the checked state of a p:selectBooleanCheckbox.
+	 * @param selectBooleanCheckbox The element representing the p:selectBooleanCheckbox.
+	 * @param checked The checked state.
+	 */
 	public static void setSelectBooleanCheckboxChecked(WebElement selectBooleanCheckbox, boolean checked) {
 		WebElement box = selectBooleanCheckbox.findElement(By.cssSelector(".ui-chkbox-box"));
 
@@ -276,18 +376,34 @@ public final class ArquillianPrimeFaces {
 
 	// Commands ---------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Click a p:commandLink.
+	 * @param commandLink The element representing the p:commandLink.
+	 */
 	public static void clickCommandLink(WebElement commandLink) {
 		clickCommandElement(commandLink, false);
 	}
 
+	/**
+	 * Click a p:commandLink which is expected to perform a HTTP redirect.
+	 * @param commandLink The element representing the p:commandLink.
+	 */
 	public static void clickCommandLinkWithRedirect(WebElement commandLink) {
 		clickCommandElement(commandLink, true);
 	}
 
+	/**
+	 * Click a p:commandButton.
+	 * @param commandButton The element representing the p:commandButton.
+	 */
 	public static void clickCommandButton(WebElement commandButton) {
 		clickCommandElement(commandButton, false);
 	}
 
+	/**
+	 * Click a p:commandButton which is expected to perform a HTTP redirect.
+	 * @param commandButton The element representing the p:commandButton.
+	 */
 	public static void clickCommandButtonWithRedirect(WebElement commandButton) {
 		clickCommandElement(commandButton, true);
 	}
@@ -309,6 +425,10 @@ public final class ArquillianPrimeFaces {
 
 	// Links ------------------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Click a p:link.
+	 * @param link The element representing the p:link.
+	 */
 	public static void clickLink(WebElement link) {
 		waitGui().until(elementToBeClickable(link));
 
