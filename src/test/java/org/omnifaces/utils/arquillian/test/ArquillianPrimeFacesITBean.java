@@ -10,8 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.omnifaces.utils.arquillian;
+package org.omnifaces.utils.arquillian.test;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,7 +52,44 @@ public class ArquillianPrimeFacesITBean {
 	}
 
 	public void commandButton() {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("invoked"));
+		addGlobalMessage("commandButton");
+	}
+
+	public String commandButtonWithRedirect() {
+		addFlashGlobalMessage("commandButtonWithRedirect");
+		return getViewIdWithRedirect();
+	}
+
+	public void commandLink() {
+		addGlobalMessage("commandLink");
+	}
+
+	public String commandLinkWithRedirect() {
+		addFlashGlobalMessage("commandLinkWithRedirect");
+		return getViewIdWithRedirect();
+	}
+
+	private void addGlobalMessage(String action) {
+		Map<String, Serializable> results = new LinkedHashMap<>();
+		results.put("inputText", inputText);
+		results.put("inputNumber", inputNumber);
+		results.put("spinner", spinner);
+		results.put("slider", slider);
+		results.put("autoComplete", autoComplete);
+		results.put("selectOneMenu", selectOneMenu);
+		results.put("selectOneRadio", selectOneRadio);
+		results.put("selectBooleanCheckbox", selectBooleanCheckbox);
+		results.put("action", action);
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(results.toString()));
+	}
+
+	private void addFlashGlobalMessage(String globalMessage) {
+		addGlobalMessage(globalMessage);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+	}
+
+	private String getViewIdWithRedirect() {
+		return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true";
 	}
 
 	public String getInputText() {
