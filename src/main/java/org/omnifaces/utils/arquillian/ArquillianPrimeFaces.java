@@ -33,6 +33,7 @@ import org.jboss.arquillian.drone.api.annotation.Default;
 import org.jboss.arquillian.graphene.context.GrapheneContext;
 import org.jboss.arquillian.graphene.proxy.GrapheneProxyInstance;
 import org.jboss.arquillian.graphene.spi.configuration.GrapheneConfiguration;
+import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -55,6 +56,7 @@ public final class ArquillianPrimeFaces {
 	/**
 	 * Allows more flexible programmatic configuration as to wait timeouts.
 	 * Graphene#guardXxx() namely doesn't support specifying custom timeouts and defaults to 2~3 seconds which may be too low sometimes.
+	 * Best place to run this is a {@link Before} annotated method.
 	 * @param browser The browser.
 	 * @param timeout The timeout.
 	 */
@@ -321,6 +323,8 @@ public final class ArquillianPrimeFaces {
 
 	/**
 	 * Set the query of a p:autoComplete.
+	 * This should return the available items which you can then select via {@link #setAutoCompleteValue(WebElement, Serializable)}.
+	 * Alternatively, you can also use {@link #setAutoCompleteValue(WebElement, String, Serializable)} which does both in a single call.
 	 * @param autoComplete The element representing the p:autoComplete.
 	 * @param query The query to run auto complete for.
 	 */
@@ -335,6 +339,8 @@ public final class ArquillianPrimeFaces {
 
 	/**
 	 * Set the selected value of a p:autoComplete.
+	 * This should be match one of the available items as returned by {@link #setAutoCompleteQuery(WebElement, String)}.
+	 * Alternatively, you can also use {@link #setAutoCompleteValue(WebElement, String, Serializable)} which does both in a single call.
 	 * @param autoComplete The element representing the p:autoComplete.
 	 * @param value The selected value. This must match the item value (not label!).
 	 * @return The label associated with the selected value, may be useful for comparison/logging.
