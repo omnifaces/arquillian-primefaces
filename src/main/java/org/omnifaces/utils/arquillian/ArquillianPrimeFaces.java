@@ -335,7 +335,7 @@ public final class ArquillianPrimeFaces {
 
 	/**
 	 * Set the selected value of a p:autoComplete.
-	 * This should be match one of the available items as returned by {@link #setAutoCompleteQuery(WebElement, String)}.
+	 * This should match one of the available items as returned by {@link #setAutoCompleteQuery(WebElement, String)}.
 	 * Alternatively, you can also use {@link #setAutoCompleteValue(WebElement, String, Serializable)} which does both in a single call.
 	 * @param autoComplete The element representing the p:autoComplete.
 	 * @param value The selected value. This must match the item value (not label!).
