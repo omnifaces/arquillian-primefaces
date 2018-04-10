@@ -23,4 +23,4 @@ deploy:
    skip_cleanup: true
    on:
       branch: develop
-      condition: "$PRIMEFACES=6.2" && "$BROWSER=htmlunit"
+      condition: "$PRIMEFACES=6.2 && $BROWSER=htmlunit"
