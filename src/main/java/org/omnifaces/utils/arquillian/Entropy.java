@@ -80,8 +80,9 @@ public final class Entropy {
 	 * Returns random item from given list.
 	 * @param list List to get random item from.
 	 * @return Random item from given list.
+	 * @param <E> Generic list element type.
 	 */
-	public static <T> T getRandomListItem(List<T> list) {
+	public static <E> E getRandomListItem(List<E> list) {
 		return list.get(ThreadLocalRandom.current().nextInt(0, list.size()));
 	}
 
@@ -89,6 +90,7 @@ public final class Entropy {
 	 * Returns random value from given enum.
 	 * @param enumType Enum type to get random value from.
 	 * @return Random value from given enum.
+	 * @param <E> Generic enum type.
 	 */
 	public static <E extends Enum<E>> E getRandomEnumValue(Class<E> enumType) {
 		E[] values = enumType.getEnumConstants();

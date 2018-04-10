@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
@@ -69,33 +70,30 @@ public class ArquillianPrimeFacesITBean {
 		return new ArrayList<>(selectItems.keySet());
 	}
 
-	public void commandButton() {
-		addGlobalMessage("commandButton");
+	public void submit() {
+		addGlobalMessage();
 	}
 
-	public void commandButtonWithoutAjax() {
-		addGlobalMessage("commandButtonWithoutAjax");
-	}
-
-	public String commandButtonWithRedirect() {
-		addFlashGlobalMessage("commandButtonWithRedirect");
+	public String submitAndRedirect() {
+		addFlashGlobalMessage();
 		return getViewIdWithRedirect();
 	}
 
 	public void commandLink() {
-		addGlobalMessage("commandLink");
+		addGlobalMessage();
 	}
 
 	public void commandLinkWithoutAjax() {
-		addGlobalMessage("commandLinkWithoutAjax");
+		addGlobalMessage();
 	}
 
 	public String commandLinkWithRedirect() {
-		addFlashGlobalMessage("commandLinkWithRedirect");
+		addFlashGlobalMessage();
 		return getViewIdWithRedirect();
 	}
 
-	private void addGlobalMessage(String command) {
+	private void addGlobalMessage() {
+		FacesContext context = FacesContext.getCurrentInstance();
 		Map<String, Serializable> results = new LinkedHashMap<>();
 		results.put("inputText", inputText);
 		results.put("inputNumber", inputNumber);
@@ -106,12 +104,12 @@ public class ArquillianPrimeFacesITBean {
 		results.put("selectOneRadio", selectOneRadio);
 		results.put("selectOneButton", selectOneButton);
 		results.put("selectBooleanCheckbox", selectBooleanCheckbox);
-		results.put("command", command);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(results.toString()));
+		results.put("command", UIComponent.getCurrentComponent(context).getClientId(context));
+		context.addMessage(null, new FacesMessage(results.toString()));
 	}
 
-	private void addFlashGlobalMessage(String globalMessage) {
-		addGlobalMessage(globalMessage);
+	private void addFlashGlobalMessage() {
+		addGlobalMessage();
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 	}
 

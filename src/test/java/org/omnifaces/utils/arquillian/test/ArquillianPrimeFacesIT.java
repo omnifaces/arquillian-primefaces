@@ -20,6 +20,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
@@ -80,6 +81,18 @@ public class ArquillianPrimeFacesIT {
 	@ArquillianResource
 	private URL baseURL;
 
+	@Before
+	public void init() {
+		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(10));
+	}
+
+	protected void open(String page) {
+		browser.get(baseURL + page);
+	}
+
+
+	// Elements -------------------------------------------------------------------------------------------------------
+
 	@FindBy(id="form")
 	private WebElement form;
 
@@ -134,140 +147,119 @@ public class ArquillianPrimeFacesIT {
 	@FindBy(id="form:absent")
 	private WebElement absent;
 
-	@Before
-	public void init() {
-		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(10));
-	}
+
+	// Tests ----------------------------------------------------------------------------------------------------------
 
 	@Test
 	public void testStatefulWithCommandButton() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertStateful(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButton), "commandButton");
+		openStateful();
+		fillInputValuesAndSubmit(commandButton, ArquillianPrimeFaces::clickCommandButton);
 	}
 
 	@Test
 	public void testStatefulWithCommandButtonWithoutAjax() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertStateful(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax), "commandButtonWithoutAjax");
+		openStateful();
+		fillInputValuesAndSubmit(commandButtonWithoutAjax, ArquillianPrimeFaces::clickCommandButton);
 	}
 
 	@Test
 	public void testStatefulWithCommandButtonWithRedirect() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertStateful(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandButtonWithRedirect(commandButtonWithRedirect), "commandButtonWithRedirect");
+		openStateful();
+		fillInputValuesAndSubmit(commandButtonWithRedirect, ArquillianPrimeFaces::clickCommandButtonWithRedirect);
 	}
 
 	@Test
 	public void testStatefulWithCommandLink() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertStateful(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLink), "commandLink");
+		openStateful();
+		fillInputValuesAndSubmit(commandLink, ArquillianPrimeFaces::clickCommandLink);
 	}
 
 	@Test
 	public void testStatefulWithCommandLinkWithoutAjax() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertStateful(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax), "commandLinkWithoutAjax");
+		openStateful();
+		fillInputValuesAndSubmit(commandLinkWithoutAjax, ArquillianPrimeFaces::clickCommandLink);
 	}
 
 	@Test
 	public void testStatefulWithCommandLinkWithRedirect() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertStateful(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect), "commandLinkWithRedirect");
+		openStateful();
+		fillInputValuesAndSubmit(commandLinkWithRedirect, ArquillianPrimeFaces::clickCommandLinkWithRedirect);
 	}
 
 	@Test
 	public void testStatelessWithCommandButton() {
-		open("stateless.xhtml");
-		ArquillianPrimeFaces.assertStateless(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButton), "commandButton");
+		openStateless();
+		fillInputValuesAndSubmit(commandButton, ArquillianPrimeFaces::clickCommandButton);
 	}
 
 	@Test
 	public void testStatelessWithCommandButtonWithoutAjax() {
-		open("stateless.xhtml");
-		ArquillianPrimeFaces.assertStateless(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandButton(commandButtonWithoutAjax), "commandButtonWithoutAjax");
+		openStateless();
+		fillInputValuesAndSubmit(commandButtonWithoutAjax, ArquillianPrimeFaces::clickCommandButton);
 	}
 
 	@Test
 	public void testStatelessWithCommandButtonWithRedirect() {
-		open("stateless.xhtml");
-		ArquillianPrimeFaces.assertStateless(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandButtonWithRedirect(commandButtonWithRedirect), "commandButtonWithRedirect");
+		openStateless();
+		fillInputValuesAndSubmit(commandButtonWithRedirect, ArquillianPrimeFaces::clickCommandButtonWithRedirect);
 	}
 
 	@Test
 	public void testStatelessWithCommandLink() {
-		open("stateless.xhtml");
-		ArquillianPrimeFaces.assertStateless(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLink), "commandLink");
+		openStateless();
+		fillInputValuesAndSubmit(commandLink, ArquillianPrimeFaces::clickCommandLink);
 	}
 
 	@Test
 	public void testStatelessWithCommandLinkWithoutAjax() {
-		open("stateless.xhtml");
-		ArquillianPrimeFaces.assertStateless(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandLink(commandLinkWithoutAjax), "commandLinkWithoutAjax");
+		openStateless();
+		fillInputValuesAndSubmit(commandLinkWithoutAjax, ArquillianPrimeFaces::clickCommandLink);
 	}
 
 	@Test
 	public void testStatelessWithCommandLinkWithRedirect() {
-		open("stateless.xhtml");
-		ArquillianPrimeFaces.assertStateless(form);
-		submit(() -> ArquillianPrimeFaces.clickCommandLinkWithRedirect(commandLinkWithRedirect), "commandLinkWithRedirect");
+		openStateless();
+		fillInputValuesAndSubmit(commandLinkWithRedirect, ArquillianPrimeFaces::clickCommandLinkWithRedirect);
 	}
 
 	@Test
 	public void testValidationErrors() {
-		open("stateful.xhtml");
-		ArquillianPrimeFaces.clickCommandButton(commandButton);
-		ArquillianPrimeFaces.assertInvalid(inputText);
-		ArquillianPrimeFaces.assertInvalid(inputNumber);
-		ArquillianPrimeFaces.assertInvalid(spinner);
-		ArquillianPrimeFaces.assertInvalid(slider);
-		ArquillianPrimeFaces.assertInvalid(autoComplete);
-		ArquillianPrimeFaces.assertInvalid(selectOneMenu);
-		ArquillianPrimeFaces.assertInvalid(selectOneRadio);
-		ArquillianPrimeFaces.assertInvalid(selectOneButton);
-		// Cannot assert checkbox invalid as required=true has no effect there.
+		openStateful();
+		submit(commandButton, ArquillianPrimeFaces::clickCommandButton);
+		assertSubmitInvalid();
 	}
 
 	@Test
 	public void testPresence() {
+		openStateful();
+		assertPresence();
+	}
+
+
+	// Testers --------------------------------------------------------------------------------------------------------
+
+	protected void openStateful() {
 		open("stateful.xhtml");
-		ArquillianPrimeFaces.assertPresent(form);
-		ArquillianPrimeFaces.assertPresent(inputText);
-		ArquillianPrimeFaces.assertPresent(inputNumber);
-		ArquillianPrimeFaces.assertPresent(spinner);
-		ArquillianPrimeFaces.assertPresent(slider);
-		ArquillianPrimeFaces.assertPresent(autoComplete);
-		ArquillianPrimeFaces.assertPresent(selectOneMenu);
-		ArquillianPrimeFaces.assertPresent(selectOneRadio);
-		ArquillianPrimeFaces.assertPresent(selectOneButton);
-		ArquillianPrimeFaces.assertPresent(selectBooleanCheckbox);
-		ArquillianPrimeFaces.assertPresent(commandButton);
-		ArquillianPrimeFaces.assertPresent(commandButtonWithRedirect);
-		ArquillianPrimeFaces.assertPresent(commandLink);
-		ArquillianPrimeFaces.assertPresent(commandLinkWithRedirect);
-		ArquillianPrimeFaces.assertAbsent(absent);
+		ArquillianPrimeFaces.assertStateful(form);
 	}
 
-	private void open(String page) {
-		browser.get(baseURL + page);
+	protected void openStateless() {
+		open("stateless.xhtml");
+		ArquillianPrimeFaces.assertStateless(form);
 	}
 
-	private void submit(Runnable command, String commandName) {
-		Map<String, Serializable> inputValues = fillInputValues(command);
-		checkSubmittedValues(inputValues, commandName);
+	protected void submit(WebElement command, Consumer<WebElement> action) {
+		action.accept(command);
 	}
 
-	private Map<String, Serializable> fillInputValues(Runnable command) {
+	protected void fillInputValuesAndSubmit(WebElement command, Consumer<WebElement> action) {
+		Map<String, Serializable> inputValues = fillInputValues();
+		inputValues.put("command", command.getAttribute("id"));
+		submit(command, action);
+		assertSubmitValid(inputValues);
+	}
+
+	protected Map<String, Serializable> fillInputValues() {
 		Map<String, Serializable> inputValues = new LinkedHashMap<>();
 
 		String inputTextValue = Entropy.getRandomString();
@@ -310,8 +302,13 @@ public class ArquillianPrimeFacesIT {
 		inputValues.put("selectBooleanCheckbox", selectBooleanCheckboxChecked);
 		ArquillianPrimeFaces.setSelectBooleanCheckboxChecked(selectBooleanCheckbox, selectBooleanCheckboxChecked);
 
-		command.run();
+		return inputValues;
+	}
 
+
+	// Assertions -----------------------------------------------------------------------------------------------------
+
+	protected void assertSubmitValid(Map<String, Serializable> inputValues) {
 		ArquillianPrimeFaces.assertValid(inputText);
 		ArquillianPrimeFaces.assertValid(inputNumber);
 		ArquillianPrimeFaces.assertValid(spinner);
@@ -321,13 +318,37 @@ public class ArquillianPrimeFacesIT {
 		ArquillianPrimeFaces.assertValid(selectOneRadio);
 		ArquillianPrimeFaces.assertValid(selectOneButton);
 		ArquillianPrimeFaces.assertValid(selectBooleanCheckbox);
-
-		return inputValues;
+		Assert.assertEquals(inputValues.toString(), globalMessages.getText());
 	}
 
-	private void checkSubmittedValues(Map<String, Serializable> inputValues, String commandName) {
-		inputValues.put("command", commandName);
-		Assert.assertEquals(inputValues.toString(), globalMessages.getText());
+	protected void assertSubmitInvalid() {
+		ArquillianPrimeFaces.assertInvalid(inputText);
+		ArquillianPrimeFaces.assertInvalid(inputNumber);
+		ArquillianPrimeFaces.assertInvalid(spinner);
+		ArquillianPrimeFaces.assertInvalid(slider);
+		ArquillianPrimeFaces.assertInvalid(autoComplete);
+		ArquillianPrimeFaces.assertInvalid(selectOneMenu);
+		ArquillianPrimeFaces.assertInvalid(selectOneRadio);
+		ArquillianPrimeFaces.assertInvalid(selectOneButton);
+		// Cannot assert checkbox invalid as required=true has no effect there.
+	}
+
+	protected void assertPresence() {
+		ArquillianPrimeFaces.assertPresent(form);
+		ArquillianPrimeFaces.assertPresent(inputText);
+		ArquillianPrimeFaces.assertPresent(inputNumber);
+		ArquillianPrimeFaces.assertPresent(spinner);
+		ArquillianPrimeFaces.assertPresent(slider);
+		ArquillianPrimeFaces.assertPresent(autoComplete);
+		ArquillianPrimeFaces.assertPresent(selectOneMenu);
+		ArquillianPrimeFaces.assertPresent(selectOneRadio);
+		ArquillianPrimeFaces.assertPresent(selectOneButton);
+		ArquillianPrimeFaces.assertPresent(selectBooleanCheckbox);
+		ArquillianPrimeFaces.assertPresent(commandButton);
+		ArquillianPrimeFaces.assertPresent(commandButtonWithRedirect);
+		ArquillianPrimeFaces.assertPresent(commandLink);
+		ArquillianPrimeFaces.assertPresent(commandLinkWithRedirect);
+		ArquillianPrimeFaces.assertAbsent(absent);
 	}
 
 }
