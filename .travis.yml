@@ -11,7 +11,7 @@ env:
    - PRIMEFACES=6.2
    - PRIMEFACES=6.1
    - PRIMEFACES=6.0
-script: mvn verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES
+script: mvn --batch-mode verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES
 
 # Do snapshot deployment.
 deploy:
