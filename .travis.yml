@@ -14,7 +14,7 @@ env:
    - PRIMEFACES=6.1 BROWSER=phantomjs
    - PRIMEFACES=6.0 BROWSER=htmlunit
    - PRIMEFACES=6.0 BROWSER=phantomjs
-script: mvn verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES -Dtest.browser=$BROWSER
+script: mvn verify --batch-mode -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES -Dtest.browser=$BROWSER
 
 # Do snapshot deployment.
 deploy:
@@ -23,4 +23,4 @@ deploy:
    skip_cleanup: true
    on:
       branch: develop
-      condition: "$PRIMEFACES = 6.2"
+      condition: "$PRIMEFACES=6.2" && "$BROWSER=htmlunit"
