@@ -6,12 +6,26 @@ cache:
    directories:
       - "$HOME/.m2/repository"
 
-# Do integration test on configured PrimeFaces versions.
+# Do integration test on configured PrimeFaces versions and available headless browsers.
 env:
-   - PRIMEFACES=6.2
-   - PRIMEFACES=6.1
-   - PRIMEFACES=6.0
-script: mvn verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES
+   - PRIMEFACES=6.2 BROWSER=phantomjs
+   - PRIMEFACES=6.2 BROWSER=chromeheadless
+   - PRIMEFACES=6.2 BROWSER=htmlunit
+   - PRIMEFACES=6.1 BROWSER=phantomjs
+   - PRIMEFACES=6.1 BROWSER=chromeheadless
+   - PRIMEFACES=6.1 BROWSER=htmlunit
+   - PRIMEFACES=6.0 BROWSER=phantomjs
+   - PRIMEFACES=6.0 BROWSER=chromeheadless
+   - PRIMEFACES=6.0 BROWSER=htmlunit
+
+install:
+- if [ "$BROWSER" == "chromeheadless" ]; then sudo add-apt-repository --yes ppa:saiarcot895/chromium-dev && sudo apt-get update && sudo apt-get install --yes chromium-browser; fi
+    # avoid `org.openqa.selenium.SessionNotCreatedException: session not created exception: Chrome version must be >= 64.0.3282.0`
+- which -a chromium-browser && chromium-browser --version
+- if [ -e /usr/bin/google-chrome ]; then sudo rm /usr/bin/google-chrome; fi && sudo ln -s -T /usr/bin/chromium-browser /usr/bin/google-chrome
+    # Selenium chromedriver only searches there, see https://stackoverflow.com/questions/49742568/org-openqa-selenium-sessionnotcreatedexception-because-of-chrome-version-must-b/49745398#49745398 for details
+
+script: mvn verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES -Dbrowser=$BROWSER
 
 # Do snapshot deployment.
 deploy:
