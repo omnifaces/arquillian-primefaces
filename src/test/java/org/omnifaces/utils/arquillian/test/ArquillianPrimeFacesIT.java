@@ -83,6 +83,7 @@ public class ArquillianPrimeFacesIT {
 
 	@Before
 	public void init() {
+//		browser.manage().window().setSize(new Dimension(1600, 1200));
 		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(10));
 	}
 

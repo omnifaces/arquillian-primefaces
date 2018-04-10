@@ -209,20 +209,16 @@ public final class ArquillianPrimeFaces {
 		WebElement document = selectOneMenu.findElement(By.xpath("/*"));
 		WebElement input = document.findElement(By.id(clientId + "_input"));
 		String itemValue = value.toString();
-		String itemLabel = input.findElement(By.cssSelector("option[value='" + itemValue + "']")).getText();
-		WebElement selectedOption = input.findElements(By.tagName("option")).stream().filter(o -> input.getText().equals(o.getText())).findFirst().orElse(null);
+		String itemLabel = executeScript("return $(document.getElementById('" + input.getAttribute("id") + "')).find('option[value=\"" + itemValue + "\"]').text()"); // getText() doesn't work as option is hidden. It's needed because ui-selectonemenu-item doesn't have a data-value.
+		document.findElement(By.id(clientId + "_label")).click(); // Open panel.
+		WebElement panel = document.findElement(By.id(clientId + "_panel"));
+		WebElement selectItem = panel.findElement(By.cssSelector(".ui-selectonemenu-item[data-label='" + itemLabel + "']"));
 
-		if (selectedOption == null || !itemValue.equals(selectedOption.getAttribute("value"))) {
-			document.findElement(By.id(clientId + "_label")).click(); // Open panel.
-			WebElement panel = document.findElement(By.id(clientId + "_panel"));
-			WebElement selectItem = panel.findElement(By.cssSelector(".ui-selectonemenu-item[data-label='" + itemLabel + "']"));
-
-			if (input.getAttribute("onchange") != null) {
-				guardAjax(selectItem).click();
-			}
-			else {
-				selectItem.click();
-			}
+		if (input.getAttribute("onchange") != null) {
+			guardAjax(selectItem).click();
+		}
+		else {
+			selectItem.click();
 		}
 
 		return itemLabel;
@@ -455,9 +451,10 @@ public final class ArquillianPrimeFaces {
 
 	// Helpers ----------------------------------------------------------------------------------------------------------------------------
 
-	private static void executeScript(String script) {
+	@SuppressWarnings("unchecked")
+	private static <T> T executeScript(String script) {
 		JavascriptExecutor browser = (JavascriptExecutor) GrapheneContext.getContextFor(Default.class).getWebDriver();
-		browser.executeScript(script);
+		return (T) browser.executeScript(script);
 	}
 
 }

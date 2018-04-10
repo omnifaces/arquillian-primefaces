@@ -6,12 +6,15 @@ cache:
    directories:
       - "$HOME/.m2/repository"
 
-# Do integration test on configured PrimeFaces versions.
+# Do integration test on configured PrimeFaces versions and Selenium browsers.
 env:
-   - PRIMEFACES=6.2
-   - PRIMEFACES=6.1
-   - PRIMEFACES=6.0
-script: mvn verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES
+   - PRIMEFACES=6.2 BROWSER=htmlunit
+   - PRIMEFACES=6.2 BROWSER=phantomjs
+   - PRIMEFACES=6.1 BROWSER=htmlunit
+   - PRIMEFACES=6.1 BROWSER=phantomjs
+   - PRIMEFACES=6.0 BROWSER=htmlunit
+   - PRIMEFACES=6.0 BROWSER=phantomjs
+script: mvn verify -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES -Dtest.browser=$BROWSER
 
 # Do snapshot deployment.
 deploy:

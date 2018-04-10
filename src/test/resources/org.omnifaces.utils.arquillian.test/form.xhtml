@@ -56,12 +56,12 @@
 		<p:selectBooleanCheckbox id="selectBooleanCheckbox" value="#{arquillianPrimeFacesITBean.selectBooleanCheckbox}" />
 		<p:message id="selectBooleanCheckboxMessage" for="selectBooleanCheckbox" />
 
-		<p:commandButton id="commandButton" action="#{arquillianPrimeFacesITBean.submit}" update="@form" />
-		<p:commandButton id="commandButtonWithoutAjax" action="#{arquillianPrimeFacesITBean.submit}" ajax="false" />
-		<p:commandButton id="commandButtonWithRedirect" action="#{arquillianPrimeFacesITBean.submitAndRedirect}" />
-		<p:commandLink id="commandLink" action="#{arquillianPrimeFacesITBean.submit}" update="@form" />
-		<p:commandLink id="commandLinkWithoutAjax" action="#{arquillianPrimeFacesITBean.submit}" ajax="false" />
-		<p:commandLink id="commandLinkWithRedirect" action="#{arquillianPrimeFacesITBean.submitAndRedirect}" />
+		<p:commandButton id="commandButton" value="submit" action="#{arquillianPrimeFacesITBean.submit}" update="@form" />
+		<p:commandButton id="commandButtonWithoutAjax" value="submit" action="#{arquillianPrimeFacesITBean.submit}" ajax="false" />
+		<p:commandButton id="commandButtonWithRedirect" value="submit" action="#{arquillianPrimeFacesITBean.submitAndRedirect}" />
+		<p:commandLink id="commandLink" value="submit" action="#{arquillianPrimeFacesITBean.submit}" update="@form" />
+		<p:commandLink id="commandLinkWithoutAjax" value="submit" action="#{arquillianPrimeFacesITBean.submit}" ajax="false" />
+		<p:commandLink id="commandLinkWithRedirect" value="submit" action="#{arquillianPrimeFacesITBean.submitAndRedirect}" />
 		<p:link id="link" />
 
 		<h:messages id="globalMessages" globalOnly="true" />

@@ -59,6 +59,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<test.wildfly.version>12.0.0.Final</test.wildfly.version>
 		<test.primefaces.version>6.2</test.primefaces.version>
+		<test.browser>htmlunit</test.browser>
 	</properties>
 
 	<dependencies>
@@ -307,6 +308,7 @@
 								<jboss.home>${project.build.directory}/wildfly-${test.wildfly.version}</jboss.home>
 								<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 								<test.primefaces.version>${test.primefaces.version}</test.primefaces.version>
+								<test.browser>${test.browser}</test.browser>
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
