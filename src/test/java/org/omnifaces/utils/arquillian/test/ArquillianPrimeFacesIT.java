@@ -42,6 +42,7 @@ import org.junit.runner.RunWith;
 import org.omnifaces.utils.arquillian.ArquillianPrimeFaces;
 import org.omnifaces.utils.arquillian.Entropy;
 import org.omnifaces.utils.arquillian.test.ArquillianPrimeFacesITBean.Item;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -59,6 +60,7 @@ public class ArquillianPrimeFacesIT {
 			.addAsLibraries(Maven.resolver().resolve("org.primefaces:primefaces:" + getProperty("test.primefaces.version")).withTransitivity().asFile())
 			.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
 			.addAsWebResource(packageName + "/stateful.xhtml")
+			.addAsWebResource(packageName + "/statefulWithDialog.xhtml")
 			.addAsWebResource(packageName + "/stateless.xhtml")
 			.addAsWebResource(packageName + "/form.xhtml");
 	}
@@ -83,7 +85,7 @@ public class ArquillianPrimeFacesIT {
 
 	@Before
 	public void init() {
-//		browser.manage().window().setSize(new Dimension(1600, 1200));
+		browser.manage().window().setSize(new Dimension(1600, 1200)); // Necessary to get the form in the dialog to fit within the viewport.
 		ArquillianPrimeFaces.configureTimeouts(browser, Duration.ofSeconds(10));
 	}
 
@@ -147,6 +149,12 @@ public class ArquillianPrimeFacesIT {
 
 	@FindBy(id="form:absent")
 	private WebElement absent;
+
+	@FindBy(id="openDialogButton")
+	private WebElement openDialogButton;
+
+	@FindBy(id="openDialogForm:openDialogCommandButton")
+	private WebElement openDialogCommandButton;
 
 
 	// Tests ----------------------------------------------------------------------------------------------------------
@@ -224,6 +232,18 @@ public class ArquillianPrimeFacesIT {
 	}
 
 	@Test
+	public void testStatefulDialogOpenedByButtonWithCommandButton() {
+		openStatefulDialogWithButton();
+		fillInputValuesAndSubmit(commandButton, ArquillianPrimeFaces::clickCommandButton);
+	}
+
+	@Test
+	public void testStatefulDialogOpenedByCommandButtonWithCommandButton() {
+		openStatefulDialogWithCommandButton();
+		fillInputValuesAndSubmit(commandButton, ArquillianPrimeFaces::clickCommandButton);
+	}
+
+	@Test
 	public void testValidationErrors() {
 		openStateful();
 		submit(commandButton, ArquillianPrimeFaces::clickCommandButton);
@@ -247,6 +267,18 @@ public class ArquillianPrimeFacesIT {
 	protected void openStateless() {
 		open("stateless.xhtml");
 		ArquillianPrimeFaces.assertStateless(form);
+	}
+
+	protected void openStatefulDialogWithButton() {
+		open("statefulWithDialog.xhtml");
+		ArquillianPrimeFaces.assertStateful(form);
+		ArquillianPrimeFaces.clickButton(openDialogButton);
+	}
+
+	protected void openStatefulDialogWithCommandButton() {
+		open("statefulWithDialog.xhtml");
+		ArquillianPrimeFaces.assertStateful(form);
+		ArquillianPrimeFaces.clickCommandButton(openDialogCommandButton);
 	}
 
 	protected void submit(WebElement command, Consumer<WebElement> action) {

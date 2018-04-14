@@ -61,11 +61,11 @@ public final class ArquillianPrimeFaces {
 	 * @param timeout The timeout.
 	 */
 	public static void configureTimeouts(WebDriver browser, Duration timeout) {
-        while (browser instanceof GrapheneProxyInstance) {
-        	browser = ((GrapheneProxyInstance) browser).unwrap();
-        }
+		while (browser instanceof GrapheneProxyInstance) {
+			browser = ((GrapheneProxyInstance) browser).unwrap();
+		}
 
-        GrapheneContext.setContextFor(new GrapheneConfiguration() {
+		GrapheneContext.setContextFor(new GrapheneConfiguration() {
 			@Override
 			public long getWaitAjaxInterval() {
 				return timeout.getSeconds();
@@ -445,6 +445,22 @@ public final class ArquillianPrimeFaces {
 		}
 		else {
 			guardHttp(link).click();
+		}
+	}
+
+	/**
+	 * Click a p:button.
+	 * @param button The element representing the p:button.
+	 */
+	public static void clickButton(WebElement button) {
+		waitGui().until(elementToBeClickable(button));
+		String onclick = button.getAttribute("onclick");
+
+		if (!onclick.startsWith("window.open") || onclick.endsWith("'_blank')")) {
+			button.click();
+		}
+		else {
+			guardHttp(button).click();
 		}
 	}
 
