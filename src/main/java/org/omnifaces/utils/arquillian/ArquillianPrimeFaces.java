@@ -318,19 +318,33 @@ public final class ArquillianPrimeFaces {
 	}
 
 	/**
-	 * Set the query of a p:autoComplete.
-	 * This should return the available items which you can then select via {@link #setAutoCompleteValue(WebElement, Serializable)}.
+	 * Set the query of a p:autoComplete and wait for either the panel to show up or the input to be marked invalid.
+	 * When the panel is shown up, then you can select the item value via {@link #setAutoCompleteValue(WebElement, Serializable)}.
 	 * Alternatively, you can also use {@link #setAutoCompleteValue(WebElement, String, Serializable)} which does both in a single call.
 	 * @param autoComplete The element representing the p:autoComplete.
 	 * @param query The query to run auto complete for.
 	 */
 	public static void setAutoCompleteQuery(WebElement autoComplete, String query) {
+		setAutoCompleteQuery(autoComplete, query, true);
+	}
+
+	/**
+	 * Set the query of a p:autoComplete and optionally wait for either the panel to show up or the input to be marked invalid.
+	 * When the panel is shown up, then you can select the item value via {@link #setAutoCompleteValue(WebElement, Serializable)}.
+	 * @param autoComplete The element representing the p:autoComplete.
+	 * @param resultsExpected Whether immediate results are expected, i.e. the panel shows up, or the input is marked invalid.
+	 * @param query The query to run auto complete for.
+	 */
+	public static void setAutoCompleteQuery(WebElement autoComplete, String query, boolean resultsExpected) {
 		String clientId = autoComplete.getAttribute("id");
 		WebElement input = autoComplete.findElement(By.id(clientId + "_input"));
 		setInputTextValue(input, query);
-		WebElement document = autoComplete.findElement(By.xpath("/*"));
-		WebElement panel = document.findElement(By.id(clientId + "_panel"));
-		waitGui().until(or(visibilityOf(panel), attributeContains(input, "class", "ui-state-error")));
+
+		if (resultsExpected) {
+			WebElement document = autoComplete.findElement(By.xpath("/*"));
+			WebElement panel = document.findElement(By.id(clientId + "_panel"));
+			waitGui().until(or(visibilityOf(panel), attributeContains(input, "class", "ui-state-error")));
+		}
 	}
 
 	/**
@@ -345,6 +359,7 @@ public final class ArquillianPrimeFaces {
 		String clientId = autoComplete.getAttribute("id");
 		WebElement document = autoComplete.findElement(By.xpath("/*"));
 		WebElement panel = document.findElement(By.id(clientId + "_panel"));
+		waitGui().until(visibilityOf(panel));
 		WebElement selectItem = panel.findElement(By.cssSelector("[data-item-value='" + value + "']"));
 		String itemLabel = selectItem.getAttribute("data-item-label");
 		selectItem.click();
