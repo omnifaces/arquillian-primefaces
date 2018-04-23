@@ -25,7 +25,7 @@ To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces compo
 <dependency>
     <groupId>org.omnifaces</groupId>
     <artifactId>arquillian-primefaces</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -85,7 +85,7 @@ public void testSomeJSFPageWithPrimeFacesComponents() {
 }
 ```
 
-### Supported PrimeFaces 6.x components as of version 0.2
+### Supported PrimeFaces 6.x components as of version 0.3
 
 - `<p:inputText>`
 - `<p:inputMask>`
@@ -95,6 +95,7 @@ public void testSomeJSFPageWithPrimeFacesComponents() {
 - `<p:autoComplete>`
 - `<p:selectOneMenu>` (also with `<p:ajax>`)
 - `<p:selectOneRadio>` (also with `<p:ajax>`)
+- `<p:selectOneButton>`
 - `<p:selectBooleanCheckbox>`
 - `<p:commandButton>` (also with `ajax=false`)
 - `<p:commandLink>` (also with `ajax=false`)
