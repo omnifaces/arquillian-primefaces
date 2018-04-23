@@ -10,9 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.omnifaces.utils.arquillian;
+package org.omnifaces.utils.arquillian.test;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +22,31 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named
 @RequestScoped
 public class ArquillianPrimeFacesITBean {
+
+	public enum Item {
+		VALUE1("Label 1"),
+		VALUE2("Label 2"),
+		VALUE3("Label 3"),
+		VALUE4("Label 4"),
+		VALUE5("Label 5");
+
+		private final String label;
+
+		private Item(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+	}
 
 	private String inputText;
 	private Integer inputNumber;
@@ -34,24 +55,66 @@ public class ArquillianPrimeFacesITBean {
 	private String autoComplete;
 	private String selectOneMenu;
 	private String selectOneRadio;
+	private String selectOneButton;
 	private boolean selectBooleanCheckbox;
-	private Map<String, String> selectItems;
+	private Map<String, Item> selectItems;
 
 	@PostConstruct
 	public void init() {
 		selectItems = new LinkedHashMap<>();
-		selectItems.put("", "");
-		selectItems.put("Label 1", "Value 1");
-		selectItems.put("Label 2", "Value 2");
-		selectItems.put("Label 3", "Value 3");
+		selectItems.put("", null);
+		Arrays.stream(Item.values()).forEach(item -> selectItems.put(item.getLabel(), item));
 	}
 
 	public List<String> completeMethod(String query) {
-		return new ArrayList<>(selectItems.values());
+		return new ArrayList<>(selectItems.keySet());
 	}
 
-	public void commandButton() {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("invoked"));
+	public void submit() {
+		addGlobalMessage();
+	}
+
+	public String submitAndRedirect() {
+		addFlashGlobalMessage();
+		return getViewIdWithRedirect();
+	}
+
+	public void commandLink() {
+		addGlobalMessage();
+	}
+
+	public void commandLinkWithoutAjax() {
+		addGlobalMessage();
+	}
+
+	public String commandLinkWithRedirect() {
+		addFlashGlobalMessage();
+		return getViewIdWithRedirect();
+	}
+
+	private void addGlobalMessage() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		Map<String, Serializable> results = new LinkedHashMap<>();
+		results.put("inputText", inputText);
+		results.put("inputNumber", inputNumber);
+		results.put("spinner", spinner);
+		results.put("slider", slider);
+		results.put("autoComplete", autoComplete);
+		results.put("selectOneMenu", selectOneMenu);
+		results.put("selectOneRadio", selectOneRadio);
+		results.put("selectOneButton", selectOneButton);
+		results.put("selectBooleanCheckbox", selectBooleanCheckbox);
+		results.put("command", UIComponent.getCurrentComponent(context).getClientId(context));
+		context.addMessage(null, new FacesMessage(results.toString()));
+	}
+
+	private void addFlashGlobalMessage() {
+		addGlobalMessage();
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+	}
+
+	private String getViewIdWithRedirect() {
+		return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true";
 	}
 
 	public String getInputText() {
@@ -110,7 +173,15 @@ public class ArquillianPrimeFacesITBean {
 		this.selectOneRadio = selectOneRadio;
 	}
 
-	public Map<String, String> getSelectItems() {
+	public String getSelectOneButton() {
+		return selectOneButton;
+	}
+
+	public void setSelectOneButton(String selectOneButton) {
+		this.selectOneButton = selectOneButton;
+	}
+
+	public Map<String, Item> getSelectItems() {
 		return selectItems;
 	}
 

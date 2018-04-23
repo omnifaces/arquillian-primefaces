@@ -1,4 +1,26 @@
+# Configure environment.
 language: java
-
 jdk:
 - oraclejdk8
+cache:
+   directories:
+      - "$HOME/.m2/repository"
+
+# Do integration test on configured PrimeFaces versions and Selenium browsers.
+env:
+   - PRIMEFACES=6.2 BROWSER=htmlunit
+   - PRIMEFACES=6.2 BROWSER=phantomjs
+   - PRIMEFACES=6.1 BROWSER=htmlunit
+   - PRIMEFACES=6.1 BROWSER=phantomjs
+   - PRIMEFACES=6.0 BROWSER=htmlunit
+   - PRIMEFACES=6.0 BROWSER=phantomjs
+script: mvn verify --batch-mode -Dmaven.javadoc.skip=true -Dtest.primefaces.version=$PRIMEFACES -Dtest.browser=$BROWSER
+
+# Do snapshot deployment.
+deploy:
+   provider: script
+   script: mvn deploy -Dmaven.test.skip -s settings.xml
+   skip_cleanup: true
+   on:
+      branch: develop
+      condition: "$PRIMEFACES=6.2 && $BROWSER=htmlunit"

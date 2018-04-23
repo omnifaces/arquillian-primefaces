@@ -11,7 +11,7 @@
 
 	<groupId>org.omnifaces</groupId>
 	<artifactId>arquillian-primefaces</artifactId>
-	<version>0.2</version>
+	<version>0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>ArquillianPrimeFaces</name>
@@ -59,6 +59,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<test.wildfly.version>12.0.0.Final</test.wildfly.version>
 		<test.primefaces.version>6.2</test.primefaces.version>
+		<test.browser>htmlunit</test.browser>
 	</properties>
 
 	<dependencies>
@@ -201,17 +202,17 @@
 			</plugin>
 
 			<!-- Configure snapshot deployment to Sonatype. -->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -307,6 +308,7 @@
 								<jboss.home>${project.build.directory}/wildfly-${test.wildfly.version}</jboss.home>
 								<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 								<test.primefaces.version>${test.primefaces.version}</test.primefaces.version>
+								<test.browser>${test.browser}</test.browser>
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
