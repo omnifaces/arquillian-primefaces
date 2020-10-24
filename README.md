@@ -7,7 +7,7 @@ To make Arquillian - Graphene - Selenium - JUnit life easier on PrimeFaces compo
 <dependency>
     <groupId>junit</groupId>
     <artifactId>junit</artifactId>
-    <version>4.12</version>
+    <version>4.13.1</version>
     <scope>test</scope>
 </dependency>
 <dependency>
